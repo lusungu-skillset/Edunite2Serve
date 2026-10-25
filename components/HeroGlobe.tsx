@@ -118,7 +118,7 @@ export default function HeroGlobe() {
       </motion.div>
 
       {/* 3D WebGL Canvas Globe */}
-      <div className="relative aspect-square w-full max-w-[560px] sm:max-w-[620px] lg:max-w-[680px]">
+      <div className="relative aspect-square w-full max-w-[min(340px,calc(100vw-36px))] sm:max-w-[560px] lg:max-w-[680px]">
         <canvas
           ref={canvasRef}
           onPointerDown={(e) => {

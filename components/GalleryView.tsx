@@ -134,13 +134,13 @@ export default function GalleryView({ items }: { items?: GalleryItem[] } = {}) {
   return (
     <div>
       {/* Category Filter Pills */}
-      <div className="flex flex-wrap items-center gap-2 mb-10">
+      <div className="flex overflow-x-auto no-scrollbar pb-1 sm:flex-wrap items-center gap-2 mb-8 sm:mb-10">
         {categories.map((cat) => (
           <button
             key={cat}
             type="button"
             onClick={() => setSelectedCategory(cat)}
-            className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+            className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
               selectedCategory === cat
                 ? "bg-brand-forest text-brand-lime shadow-xs"
                 : "bg-white text-brand-muted hover:bg-[#ebf2e7] hover:text-brand-forest border border-[#d8e3d5]"
@@ -231,16 +231,16 @@ export default function GalleryView({ items }: { items?: GalleryItem[] } = {}) {
                 {activeItem.caption}
               </DialogDescription>
 
-              <DialogFooter className="mt-4 pt-3 border-t border-[#edf2ea] bg-transparent flex flex-row items-center justify-end gap-3 -mx-0 -mb-0">
+              <DialogFooter className="mt-4 pt-3 border-t border-[#edf2ea] bg-transparent flex flex-col sm:flex-row items-center justify-end gap-2.5 sm:gap-3 -mx-0 -mb-0">
                 <Button
                   variant="outline"
                   onClick={() => setActiveItem(null)}
-                  className="rounded-xl px-5"
+                  className="rounded-xl px-5 w-full sm:w-auto"
                 >
                   Close
                 </Button>
                 <Button
-                  className="rounded-xl bg-brand-green hover:bg-brand-forest text-white font-bold px-6 border-0"
+                  className="rounded-xl bg-brand-green hover:bg-brand-forest text-white font-bold px-6 border-0 w-full sm:w-auto justify-center"
                   render={<Link href={donationUrl} />}
                 >
                   Support This Project →

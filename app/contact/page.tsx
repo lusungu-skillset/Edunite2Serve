@@ -122,7 +122,7 @@ export default function ContactPage() {
 
             {/* Right Column: Contact Form */}
             <div className="lg:col-span-7">
-              <Card className="rounded-3xl border border-[#dfe5db] bg-[#fbfdfa] p-8 sm:p-10 shadow-sm">
+              <Card className="rounded-3xl border border-[#dfe5db] bg-[#fbfdfa] p-5 sm:p-8 lg:p-10 shadow-sm">
                 <Badge className="bg-brand-forest text-brand-lime font-bold text-xs uppercase tracking-wider mb-4 border-0">
                   Send a Message
                 </Badge>

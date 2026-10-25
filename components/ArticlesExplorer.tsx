@@ -55,14 +55,14 @@ export default function ArticlesExplorer({
   return (
     <div>
       {/* Category Filter Pills & Search */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-5 mb-10">
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-5 mb-8 sm:mb-10">
+        <div className="flex overflow-x-auto no-scrollbar pb-1 sm:flex-wrap items-center gap-2 w-full md:w-auto">
           {articleCategories.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
                 selectedCategory === cat
                   ? "bg-brand-forest text-brand-lime shadow-xs"
                   : "bg-white text-brand-muted hover:bg-[#ebf2e7] hover:text-brand-forest border border-[#d8e3d5]"
@@ -228,19 +228,19 @@ export default function ArticlesExplorer({
 
               {/* Footer CTA */}
               <DialogFooter className="mt-6 pt-4 border-t border-[#edf2ea] bg-transparent flex flex-col sm:flex-row items-center justify-between gap-4 -mx-0 -mb-0">
-                <span className="text-xs text-brand-muted font-medium">
+                <span className="text-xs text-brand-muted font-medium text-center sm:text-left">
                   Edunite2Serve Malawi Humanitarian Dispatch
                 </span>
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
                   <Button
                     variant="outline"
                     onClick={() => setActiveArticle(null)}
-                    className="rounded-xl px-5"
+                    className="rounded-xl px-5 w-full sm:w-auto"
                   >
                     Close
                   </Button>
                   <Button
-                    className="rounded-xl bg-brand-green hover:bg-brand-forest text-white font-bold px-6 border-0"
+                    className="rounded-xl bg-brand-green hover:bg-brand-forest text-white font-bold px-6 border-0 w-full sm:w-auto text-center justify-center"
                     render={<Link href={donationUrl} />}
                     onClick={() => setActiveArticle(null)}
                   >

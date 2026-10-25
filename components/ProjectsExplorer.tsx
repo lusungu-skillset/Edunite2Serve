@@ -48,14 +48,14 @@ export default function ProjectsExplorer({
   return (
     <div>
       {/* Category Pills & Search Bar */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-5 mb-10">
-        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-5 mb-8 sm:mb-10">
+        <div className="flex overflow-x-auto no-scrollbar pb-1 sm:flex-wrap items-center gap-2 w-full md:w-auto">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
                 selectedCategory === cat
                   ? "bg-brand-forest text-brand-lime shadow-xs"
                   : "bg-white text-brand-muted hover:bg-[#ebf2e7] hover:text-brand-forest border border-[#d8e3d5]"

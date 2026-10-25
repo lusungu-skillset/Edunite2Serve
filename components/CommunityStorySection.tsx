@@ -14,11 +14,11 @@ export default function CommunityStorySection() {
   return (
     <section
       aria-labelledby="community-story-heading"
-      className="bg-white ml-12 mr-12 px-5 py-[88px] sm:px-8 lg:py-[104px]"
+      className="bg-white mx-0 sm:mx-6 lg:mx-12 px-4 py-[64px] sm:px-8 lg:py-[104px]"
       id="community-story"
     >
       <div className="mx-auto grid w-full max-w-[1480px] items-center gap-8 lg:grid-cols-2 lg:gap-8">
-        <div className="relative mx-auto h-[480px] w-full max-w-[640px] sm:h-[580px] lg:mx-0 lg:h-[650px]">
+        <div className="relative mx-auto h-[380px] xs:h-[440px] sm:h-[580px] w-full max-w-[640px] lg:mx-0 lg:h-[650px]">
           <a
             aria-label="Watch the Edunite2Serve community story video on YouTube (opens in a new tab)"
             className="group absolute bottom-[4%] left-[10%] right-[6%] top-[5%] overflow-hidden rounded-[24px] border border-[#d6e4d5] bg-[#e8eee4] shadow-[0_18px_50px_rgba(7,54,31,.16)] outline-offset-4 focus-visible:outline-[3px] focus-visible:outline-brand-orange"
@@ -77,7 +77,7 @@ export default function CommunityStorySection() {
             />
           </div>
 
-          <div className="absolute bottom-[25%] left-0 z-20 rounded-r-[14px] border-y border-r border-[#b1d58e] bg-[#087b65] px-3 py-4 text-[12px] font-extrabold leading-[1.35] tracking-[.04em] text-white shadow-[0_8px_24px_rgba(7,54,31,.2)] [writing-mode:vertical-rl] rotate-180 sm:px-3.5 sm:text-[13px]">
+          <div className="absolute bottom-[25%] left-0 z-20 rounded-r-[14px] border-y border-r border-[#b1d58e] bg-[#087b65] px-3 py-4 text-[12px] font-extrabold leading-[1.35] tracking-[.04em] text-white shadow-[0_8px_24px_rgba(7,54,31,.2)] [writing-mode:vertical-rl] rotate-180 sm:px-3.5 sm:text-[13px] hidden sm:block">
             Join us in supporting children in Malawi
           </div>
         </div>
@@ -150,16 +150,16 @@ export default function CommunityStorySection() {
             ))}
           </ul>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 max-[440px]:flex-col max-[440px]:items-stretch">
             <Button
-              className="min-h-[52px] rounded-full bg-[#087b16] px-7 text-base font-bold text-white shadow-[0_5px_14px_rgba(7,54,31,.12)] hover:bg-brand-forest h-auto"
+              className="min-h-[52px] rounded-full bg-[#087b16] px-7 text-base font-bold text-white shadow-[0_5px_14px_rgba(7,54,31,.12)] hover:bg-brand-forest h-auto max-[440px]:w-full max-[440px]:justify-center"
               render={<Link href="/about-us" />}
             >
               More About Us
             </Button>
             <a
               aria-label={`Call Edunite2Serve at ${contactDetails.phoneLabel}`}
-              className="inline-flex min-h-[52px] items-center gap-3 rounded-full px-2 py-2 text-brand-forest outline-offset-4 focus-visible:outline-[3px] focus-visible:outline-brand-orange"
+              className="inline-flex min-h-[52px] items-center gap-3 rounded-full px-2 py-2 text-brand-forest outline-offset-4 focus-visible:outline-[3px] focus-visible:outline-brand-orange max-[440px]:justify-center"
               href={`tel:${contactDetails.phoneHref}`}
             >
               <PhoneCall aria-hidden="true" className="h-6 w-6 shrink-0" strokeWidth={1.7} />

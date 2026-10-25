@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#052c1a] pt-[62px] text-white">
       <div className="mx-auto w-full max-w-[1720px] px-10 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]">
-        <div className="grid grid-cols-[minmax(220px,1.35fr)_repeat(2,minmax(130px,.75fr))_minmax(180px,1fr)] gap-[35px] pb-[49px] max-[1040px]:grid-cols-[1.2fr_1fr_1fr] max-[1040px]:gap-[30px] max-[760px]:grid-cols-2 max-[760px]:gap-[34px_21px]">
+        <div className="grid grid-cols-[minmax(220px,1.35fr)_repeat(2,minmax(130px,.75fr))_minmax(180px,1fr)] gap-[35px] pb-[49px] max-[1040px]:grid-cols-[1.2fr_1fr_1fr] max-[1040px]:gap-[30px] max-[760px]:grid-cols-2 max-[760px]:gap-[34px_21px] max-[480px]:grid-cols-1 max-[480px]:gap-7">
           <div className="max-[760px]:col-[1/-1]">
             <Link className="inline-flex w-[210px] max-w-full rounded-md bg-white px-[11px] py-[9px] focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-lime" href="/" aria-label="Edunite2Serve home">
               <Image className="block h-auto w-full" src="/images/brand/edunite2serve-logo.png" alt="Edunite2Serve — Enterprise for Wholeness" width={528} height={183} />

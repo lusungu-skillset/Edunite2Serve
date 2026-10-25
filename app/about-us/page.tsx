@@ -81,7 +81,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="lg:col-span-5">
-              <div className="relative rounded-3xl bg-gradient-to-br from-[#07361f] to-[#147a3f] p-8 sm:p-10 text-white shadow-xl">
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#07361f] to-[#147a3f] p-6 sm:p-10 text-white shadow-xl">
                 <Sparkles className="h-10 w-10 text-brand-lime/80 mb-6" />
                 <blockquote className="m-0 font-sans text-xl sm:text-2xl font-bold leading-relaxed">
                   &ldquo;Seeing a need for energetic, nonprofit mission work in Africa, Edunite2Serve was formed to provide sensible Christ-centered sustainable solutions.&rdquo;

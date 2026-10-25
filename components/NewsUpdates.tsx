@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
@@ -40,6 +40,8 @@ export default function NewsUpdates({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [activeStory, setActiveStory] = useState<NewsStory | null>(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const total = items.length;
 
@@ -50,6 +52,28 @@ export default function NewsUpdates({
   const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true);
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    setIsPaused(false);
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+  };
 
   // Auto-advance news posts from right to left every 4.5 seconds
   useEffect(() => {
@@ -122,8 +146,9 @@ export default function NewsUpdates({
           style={{ perspective: "1400px" }}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {/* Subtle Ambient Depth Arc Glow */}
           <div
@@ -133,7 +158,7 @@ export default function NewsUpdates({
 
           {/* 3D Arc Track */}
           <div
-            className="relative mx-auto flex h-[480px] sm:h-[500px] w-full max-w-[340px] sm:max-w-[400px] md:max-w-[430px] items-center justify-center select-none"
+            className="relative mx-auto flex h-[460px] sm:h-[500px] w-full max-w-[min(340px,calc(100vw-36px))] sm:max-w-[400px] md:max-w-[430px] items-center justify-center select-none"
             style={{ transformStyle: "preserve-3d" }}
           >
             {items.map((item, index) => {

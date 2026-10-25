@@ -49,7 +49,7 @@ export default function Hero({
 
       <div
         className={isHome
-          ? "relative mx-auto grid min-h-[620px] w-full max-w-[1720px] grid-cols-1 items-center gap-10 px-10 py-16 lg:grid-cols-12 lg:py-24 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]"
+          ? "relative mx-auto grid min-h-[620px] max-[760px]:min-h-0 w-full max-w-[1720px] grid-cols-1 items-center gap-10 px-10 py-16 max-[760px]:py-10 max-[760px]:gap-8 lg:grid-cols-12 lg:py-24 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]"
           : "mx-auto w-full max-w-[1640px] px-10 py-[76px] pb-[82px] max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]"}
       >
         {/* Left Column: Text & CTA */}
@@ -109,10 +109,10 @@ export default function Hero({
           ) : null}
 
           {primaryCta || secondaryCta ? (
-            <div className="mt-[32px] flex flex-wrap items-center gap-6 max-[760px]:mt-[25px] max-[760px]:gap-[18px]">
+            <div className="mt-[32px] flex flex-wrap items-center gap-6 max-[760px]:mt-[25px] max-[760px]:gap-[18px] max-[440px]:flex-col max-[440px]:items-stretch max-[440px]:gap-3">
               {primaryCta ? (
                 <Button
-                  className="donate-attention min-h-[52px] gap-3 rounded-[8px] bg-brand-green hover:bg-brand-forest text-white font-bold text-sm px-6"
+                  className="donate-attention min-h-[52px] gap-3 rounded-[8px] bg-brand-green hover:bg-brand-forest text-white font-bold text-sm px-6 max-[440px]:w-full max-[440px]:justify-center"
                   render={<Link href={primaryCta.href} />}
                 >
                   {primaryCta.label} <span className="text-lg" aria-hidden="true">↗</span>
@@ -120,7 +120,7 @@ export default function Hero({
               ) : null}
               {secondaryCta ? (
                 <Button
-                  className={`min-h-[52px] gap-2.5 text-sm font-bold p-0 ${isHome ? "text-white hover:text-brand-lime" : "text-[#17372f] hover:text-brand-green"} hover:bg-transparent`}
+                  className={`min-h-[52px] gap-2.5 text-sm font-bold p-0 ${isHome ? "text-white hover:text-brand-lime" : "text-[#17372f] hover:text-brand-green"} hover:bg-transparent max-[440px]:w-full max-[440px]:justify-center max-[440px]:py-2`}
                   render={<Link href={secondaryCta.href} />}
                   variant="ghost"
                 >

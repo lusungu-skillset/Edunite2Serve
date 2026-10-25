@@ -61,17 +61,17 @@ export default function PageHeader({
 
         <div className={centered ? "mx-auto max-w-[880px] text-center" : "max-w-[960px]"}>
           {/* Eyebrow signature: cursive brand font + rule + sparkle */}
-          <div className={`mb-4 flex items-center gap-4 ${centered ? "justify-center" : "text-left"}`}>
-            <p className="giving-purpose-heading m-0 whitespace-nowrap font-brand text-[clamp(22px,2.8vw,36px)] font-extrabold italic leading-[1.1] tracking-[-.04em] text-[#00876f]">
+          <div className={`mb-4 flex items-center gap-3 sm:gap-4 ${centered ? "justify-center" : "text-left"}`}>
+            <p className="giving-purpose-heading m-0 whitespace-nowrap max-[440px]:whitespace-normal font-brand text-[clamp(20px,5vw,36px)] font-extrabold italic leading-[1.1] tracking-[-.04em] text-[#00876f]">
               {eyebrow}
             </p>
             <span
               aria-hidden="true"
-              className="giving-purpose-rule h-px min-w-[22px] flex-1 max-w-[120px] bg-[#83b9a7]"
+              className="giving-purpose-rule h-px min-w-[16px] flex-1 max-w-[120px] bg-[#83b9a7]"
             />
             <svg
               aria-hidden="true"
-              className="giving-purpose-sparkle h-[19px] w-[19px] shrink-0 text-[#00876f]"
+              className="giving-purpose-sparkle h-[18px] w-[18px] shrink-0 text-[#00876f]"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -79,21 +79,21 @@ export default function PageHeader({
             </svg>
           </div>
 
-          <h1 className="m-0 font-sans text-[clamp(36px,4.5vw,60px)] font-bold leading-[1.12] tracking-[-.035em] text-brand-forest">
+          <h1 className="m-0 font-sans text-[clamp(28px,6vw,60px)] font-bold leading-[1.14] tracking-[-.035em] text-brand-forest">
             {title}
           </h1>
 
           {description && (
-            <p className="mb-0 mt-5 max-w-[780px] text-[17px] leading-[1.75] text-brand-muted sm:text-[18px]">
+            <p className="mb-0 mt-4 sm:mt-5 max-w-[780px] text-[16px] leading-[1.75] text-brand-muted sm:text-[18px]">
               {description}
             </p>
           )}
 
           {(primaryCta || secondaryCta) && (
-            <div className={`mt-8 flex flex-wrap items-center gap-4 ${centered ? "justify-center" : ""}`}>
+            <div className={`mt-6 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4 max-[440px]:flex-col max-[440px]:items-stretch ${centered ? "justify-center" : ""}`}>
               {primaryCta && (
                 <Button
-                  className="rounded-[12px] bg-brand-green hover:bg-brand-forest text-white font-bold text-base px-7 py-3 h-auto shadow-sm"
+                  className="rounded-[12px] bg-brand-green hover:bg-brand-forest text-white font-bold text-base px-7 py-3 h-auto shadow-sm max-[440px]:w-full max-[440px]:justify-center"
                   render={<Link href={primaryCta.href} />}
                 >
                   {primaryCta.label}
@@ -102,7 +102,7 @@ export default function PageHeader({
               )}
               {secondaryCta && (
                 <Button
-                  className="rounded-[12px] border border-[#bdcbbb] bg-white hover:bg-[#f5f8ef] text-brand-forest font-bold text-base px-6 py-3 h-auto"
+                  className="rounded-[12px] border border-[#bdcbbb] bg-white hover:bg-[#f5f8ef] text-brand-forest font-bold text-base px-6 py-3 h-auto max-[440px]:w-full max-[440px]:justify-center"
                   render={<Link href={secondaryCta.href} />}
                   variant="outline"
                 >

@@ -81,20 +81,46 @@ export default function MobileMenu() {
                   <div key={item.label} className="border-b border-[#edf0e9]">
                     {item.children?.length ? (
                       <AccordionItem value={item.label} className="border-0">
-                        <AccordionTrigger className="py-3.5 font-brand text-base font-bold uppercase text-[#2D3F12] hover:text-brand-green hover:no-underline">
-                          <Link
-                            href={item.href}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIsOpen(false);
-                            }}
-                            className="hover:underline"
-                          >
-                            {item.label}
-                          </Link>
+                        <AccordionTrigger className="py-3.5 font-brand text-base font-bold uppercase text-[#2D3F12] hover:text-brand-green hover:no-underline cursor-pointer">
+                          <span>{item.label}</span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-3 pt-0">
-                          {renderSubItems(item.children)}
+                          <ul className="m-0 flex flex-col gap-1 list-none p-0 pl-3">
+                            <li>
+                              <Link
+                                className="flex py-2 text-sm font-bold text-brand-green hover:text-brand-forest transition-colors"
+                                href={item.href}
+                                onClick={() => setIsOpen(false)}
+                              >
+                                {item.label} Overview →
+                              </Link>
+                            </li>
+                            {item.children.map((subItem) => (
+                              <li key={subItem.label}>
+                                {subItem.children?.length ? (
+                                  <Accordion multiple className="w-full">
+                                    <AccordionItem value={subItem.label} className="border-0">
+                                      <AccordionTrigger className="py-2 text-sm font-semibold text-[#2D3F12] hover:text-brand-green hover:no-underline">
+                                        <span>{subItem.label}</span>
+                                      </AccordionTrigger>
+                                      <AccordionContent className="pb-1 pt-0">
+                                        {renderSubItems(subItem.children)}
+                                      </AccordionContent>
+                                    </AccordionItem>
+                                  </Accordion>
+                                ) : (
+                                  <Link
+                                    className="flex py-2 text-sm font-medium text-brand-muted hover:text-brand-forest transition-colors"
+                                    href={subItem.href}
+                                    aria-current={pathname === subItem.href ? "page" : undefined}
+                                    onClick={() => setIsOpen(false)}
+                                  >
+                                    {subItem.label}
+                                  </Link>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
                         </AccordionContent>
                       </AccordionItem>
                     ) : (

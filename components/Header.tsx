@@ -9,12 +9,12 @@ export default function Header() {
   return (
     <>
       <div className="bg-[#2b4012] font-sans text-base text-white">
-        <div className="relative mx-auto flex min-h-[62px] w-full max-w-[1720px] items-center justify-center gap-6 px-10 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]">
-          <div className="absolute right-10 flex items-center gap-6 font-medium max-[720px]:right-[18px] max-[720px]:gap-[13px] max-[440px]:right-[15px]">
-            <a className="text-white hover:text-brand-lime focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-orange [&>span]:pr-1.5 [&>span]:text-brand-lime max-[760px]:text-[0] max-[760px]:[&>span]:text-xs" href={`tel:${contactDetails.phoneHref}`}>
+        <div className="relative mx-auto flex min-h-[62px] max-[760px]:min-h-[38px] w-full max-w-[1720px] items-center justify-center gap-6 px-10 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]">
+          <div className="absolute right-10 flex items-center gap-6 font-medium max-[760px]:right-4 max-[760px]:gap-3 max-[440px]:right-3.5">
+            <a className="text-white hover:text-brand-lime focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-orange [&>span]:pr-1.5 [&>span]:text-brand-lime max-[760px]:text-[0] max-[760px]:[&>span]:text-xs max-[760px]:p-1" href={`tel:${contactDetails.phoneHref}`} aria-label={`Call ${contactDetails.phoneLabel}`}>
               <span aria-hidden="true">☎</span> {contactDetails.phoneLabel}
             </a>
-            <a className="text-white hover:text-brand-lime focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-orange [&>span]:pr-1.5 [&>span]:text-brand-lime max-[760px]:text-[0] max-[760px]:[&>span]:text-xs" href={`mailto:${contactDetails.email}`}>
+            <a className="text-white hover:text-brand-lime focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-orange [&>span]:pr-1.5 [&>span]:text-brand-lime max-[760px]:text-[0] max-[760px]:[&>span]:text-xs max-[760px]:p-1" href={`mailto:${contactDetails.email}`} aria-label={`Email ${contactDetails.email}`}>
               <span aria-hidden="true">✉</span> {contactDetails.email}
             </a>
           </div>
