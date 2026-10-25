@@ -23,3 +23,4 @@ Admin panel: [http://localhost:3000/admin](http://localhost:3000/admin)
 ## Environment Variables
 
 See .env.example for required variables (Supabase + Cloudinary).
+# Edunite2Serve
