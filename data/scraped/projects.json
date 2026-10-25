@@ -1,0 +1,350 @@
+[
+  {
+    "id": 4915,
+    "date": "2025-12-10T11:08:29",
+    "date_gmt": "2025-12-10T11:08:29",
+    "guid": {
+      "rendered": "https://edunite2serve.org/?post_type=project&#038;p=4915"
+    },
+    "modified": "2025-12-10T11:08:29",
+    "modified_gmt": "2025-12-10T11:08:29",
+    "slug": "reports",
+    "status": "publish",
+    "type": "project",
+    "link": "https://edunite2serve.org/all-project/reports/",
+    "title": {
+      "rendered": "Virtual Learning Community (VLC)"
+    },
+    "content": {
+      "rendered": "<p><img fetchpriority=\"high\" decoding=\"async\" class=\"alignnone size-medium wp-image-4855\" src=\"http://edunite2serve.org/wp-content/uploads/2025/11/VLC-LOGO-300x200.png\" alt=\"\" width=\"300\" height=\"200\" srcset=\"https://edunite2serve.org/wp-content/uploads/2025/11/VLC-LOGO-300x200.png 300w, https://edunite2serve.org/wp-content/uploads/2025/11/VLC-LOGO.png 518w\" sizes=\"(max-width: 300px) 100vw, 300px\" /></p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "",
+      "protected": false
+    },
+    "author": 1,
+    "featured_media": 4855,
+    "comment_status": "open",
+    "ping_status": "closed",
+    "template": "",
+    "project_category": [],
+    "upstream_tag": [],
+    "project-cat": [],
+    "project-tag": [],
+    "class_list": [
+      "post-4915",
+      "project",
+      "type-project",
+      "status-publish",
+      "has-post-thumbnail",
+      "hentry"
+    ],
+    "aioseo_notices": [],
+    "aioseo_head": "\n\t\t<!-- All in One SEO 5.0.3 - aioseo.com -->\n\t<meta name=\"robots\" content=\"max-image-preview:large\" />\n\t<link rel=\"canonical\" href=\"https://edunite2serve.org/all-project/reports/\" />\n\t\t<meta name=\"generator\" content=\"All in One SEO (AIOSEO) 5.0.3\" />\n\t\t<meta property=\"og:locale\" content=\"en_US\" />\n\t\t<meta property=\"og:site_name\" content=\"edunite2serve.org -\" />\n\t\t<meta property=\"og:type\" content=\"article\" />\n\t\t<meta property=\"og:title\" content=\"Virtual Learning Community (VLC) - edunite2serve.org\" />\n\t\t<meta property=\"og:url\" content=\"https://edunite2serve.org/all-project/reports/\" />\n\t\t<meta property=\"article:published_time\" content=\"2025-12-10T11:08:29+00:00\" />\n\t\t<meta property=\"article:modified_time\" content=\"2025-12-10T11:08:29+00:00\" />\n\t\t<meta name=\"twitter:card\" content=\"summary_large_image\" />\n\t\t<meta name=\"twitter:title\" content=\"Virtual Learning Community (VLC) - edunite2serve.org\" />\n\t\t<script type=\"application/ld+json\" class=\"aioseo-schema\">\n\t\t\t{\"@context\":\"https:\\/\\/schema.org\",\"@graph\":[{\"@type\":\"BreadcrumbList\",\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#breadcrumblist\",\"itemListElement\":[{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/edunite2serve.org\\/#listItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https:\\/\\/edunite2serve.org\\/\",\"nextItem\":{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#listItem\",\"name\":\"Virtual Learning Community (VLC)\"}},{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#listItem\",\"position\":2,\"name\":\"Virtual Learning Community (VLC)\",\"previousItem\":{\"@type\":\"ListItem\",\"@id\":\"https:\\/\\/edunite2serve.org\\/#listItem\",\"name\":\"Home\"}}]},{\"@type\":\"Organization\",\"@id\":\"https:\\/\\/edunite2serve.org\\/#organization\",\"name\":\"edunite2serve.org\",\"url\":\"https:\\/\\/edunite2serve.org\\/\"},{\"@type\":\"Person\",\"@id\":\"https:\\/\\/edunite2serve.org\\/author\\/yohanechepegmail-com\\/#author\",\"url\":\"https:\\/\\/edunite2serve.org\\/author\\/yohanechepegmail-com\\/\",\"image\":{\"@type\":\"ImageObject\",\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#authorImage\",\"url\":\"https:\\/\\/secure.gravatar.com\\/avatar\\/d1fb0bdb3957382f135ccdb0b065e9f4fd4f6b31d2bada3a293a2e7f9d2bd10c?s=96&d=mm&r=g\",\"width\":96,\"height\":96}},{\"@type\":\"WebPage\",\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#webpage\",\"url\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/\",\"name\":\"Virtual Learning Community (VLC) - edunite2serve.org\",\"inLanguage\":\"en-US\",\"isPartOf\":{\"@id\":\"https:\\/\\/edunite2serve.org\\/#website\"},\"breadcrumb\":{\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#breadcrumblist\"},\"author\":{\"@id\":\"https:\\/\\/edunite2serve.org\\/author\\/yohanechepegmail-com\\/#author\"},\"creator\":{\"@id\":\"https:\\/\\/edunite2serve.org\\/author\\/yohanechepegmail-com\\/#author\"},\"image\":{\"@type\":\"ImageObject\",\"url\":\"https:\\/\\/edunite2serve.org\\/wp-content\\/uploads\\/2025\\/11\\/VLC-LOGO.png\",\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#mainImage\",\"width\":518,\"height\":346},\"primaryImageOfPage\":{\"@id\":\"https:\\/\\/edunite2serve.org\\/all-project\\/reports\\/#mainImage\"},\"datePublished\":\"2025-12-10T11:08:29+00:00\",\"dateModified\":\"2025-12-10T11:08:29+00:00\"},{\"@type\":\"WebSite\",\"@id\":\"https:\\/\\/edunite2serve.org\\/#website\",\"url\":\"https:\\/\\/edunite2serve.org\\/\",\"name\":\"edunite2serve.org\",\"inLanguage\":\"en-US\",\"publisher\":{\"@id\":\"https:\\/\\/edunite2serve.org\\/#organization\"}}]}\n\t\t</script>\n\t\t<!-- All in One SEO -->\n\n",
+    "aioseo_head_json": {
+      "title": "Virtual Learning Community (VLC) - edunite2serve.org",
+      "description": "",
+      "canonical_url": "https://edunite2serve.org/all-project/reports/",
+      "robots": "max-image-preview:large",
+      "keywords": "",
+      "webmasterTools": {
+        "miscellaneous": ""
+      },
+      "schema": {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://edunite2serve.org/all-project/reports/#breadcrumblist",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "@id": "https://edunite2serve.org/#listItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://edunite2serve.org/",
+                "nextItem": {
+                  "@type": "ListItem",
+                  "@id": "https://edunite2serve.org/all-project/reports/#listItem",
+                  "name": "Virtual Learning Community (VLC)"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "@id": "https://edunite2serve.org/all-project/reports/#listItem",
+                "position": 2,
+                "name": "Virtual Learning Community (VLC)",
+                "previousItem": {
+                  "@type": "ListItem",
+                  "@id": "https://edunite2serve.org/#listItem",
+                  "name": "Home"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://edunite2serve.org/#organization",
+            "name": "edunite2serve.org",
+            "url": "https://edunite2serve.org/"
+          },
+          {
+            "@type": "Person",
+            "@id": "https://edunite2serve.org/author/yohanechepegmail-com/#author",
+            "url": "https://edunite2serve.org/author/yohanechepegmail-com/",
+            "image": {
+              "@type": "ImageObject",
+              "@id": "https://edunite2serve.org/all-project/reports/#authorImage",
+              "url": "https://secure.gravatar.com/avatar/d1fb0bdb3957382f135ccdb0b065e9f4fd4f6b31d2bada3a293a2e7f9d2bd10c?s=96&d=mm&r=g",
+              "width": 96,
+              "height": 96
+            }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://edunite2serve.org/all-project/reports/#webpage",
+            "url": "https://edunite2serve.org/all-project/reports/",
+            "name": "Virtual Learning Community (VLC) - edunite2serve.org",
+            "inLanguage": "en-US",
+            "isPartOf": {
+              "@id": "https://edunite2serve.org/#website"
+            },
+            "breadcrumb": {
+              "@id": "https://edunite2serve.org/all-project/reports/#breadcrumblist"
+            },
+            "author": {
+              "@id": "https://edunite2serve.org/author/yohanechepegmail-com/#author"
+            },
+            "creator": {
+              "@id": "https://edunite2serve.org/author/yohanechepegmail-com/#author"
+            },
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://edunite2serve.org/wp-content/uploads/2025/11/VLC-LOGO.png",
+              "@id": "https://edunite2serve.org/all-project/reports/#mainImage",
+              "width": 518,
+              "height": 346
+            },
+            "primaryImageOfPage": {
+              "@id": "https://edunite2serve.org/all-project/reports/#mainImage"
+            },
+            "datePublished": "2025-12-10T11:08:29+00:00",
+            "dateModified": "2025-12-10T11:08:29+00:00"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://edunite2serve.org/#website",
+            "url": "https://edunite2serve.org/",
+            "name": "edunite2serve.org",
+            "inLanguage": "en-US",
+            "publisher": {
+              "@id": "https://edunite2serve.org/#organization"
+            }
+          }
+        ]
+      },
+      "og:locale": "en_US",
+      "og:site_name": "edunite2serve.org -",
+      "og:type": "article",
+      "og:title": "Virtual Learning Community (VLC) - edunite2serve.org",
+      "og:url": "https://edunite2serve.org/all-project/reports/",
+      "article:published_time": "2025-12-10T11:08:29+00:00",
+      "article:modified_time": "2025-12-10T11:08:29+00:00",
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Virtual Learning Community (VLC) - edunite2serve.org"
+    },
+    "aioseo_meta_data": {
+      "post_id": "4915",
+      "title": null,
+      "description": null,
+      "keywords": null,
+      "keyphrases": {
+        "focus": [],
+        "additional": []
+      },
+      "primary_term": null,
+      "canonical_url": null,
+      "og_title": null,
+      "og_description": null,
+      "og_object_type": "default",
+      "og_image_type": "default",
+      "og_image_url": null,
+      "og_image_width": null,
+      "og_image_height": null,
+      "og_image_custom_url": null,
+      "og_image_custom_fields": null,
+      "og_video": "",
+      "og_custom_url": null,
+      "og_article_section": null,
+      "og_article_tags": null,
+      "twitter_use_og": false,
+      "twitter_card": "default",
+      "twitter_image_type": "default",
+      "twitter_image_url": null,
+      "twitter_image_custom_url": null,
+      "twitter_image_custom_fields": null,
+      "twitter_title": null,
+      "twitter_description": null,
+      "schema": {
+        "blockGraphs": [],
+        "customGraphs": [],
+        "default": {
+          "data": {
+            "Article": [],
+            "Course": [],
+            "Dataset": [],
+            "FAQPage": [],
+            "Movie": [],
+            "Person": [],
+            "Product": [],
+            "ProductReview": [],
+            "Car": [],
+            "Recipe": [],
+            "Service": [],
+            "SoftwareApplication": [],
+            "WebPage": []
+          },
+          "graphName": "WebPage",
+          "isEnabled": true
+        },
+        "graphs": []
+      },
+      "schema_type": "default",
+      "schema_type_options": null,
+      "pillar_content": false,
+      "robots_default": true,
+      "robots_noindex": false,
+      "robots_noarchive": false,
+      "robots_nosnippet": false,
+      "robots_nofollow": false,
+      "robots_noimageindex": false,
+      "robots_noodp": false,
+      "robots_notranslate": false,
+      "robots_max_snippet": "-1",
+      "robots_max_videopreview": "-1",
+      "robots_max_imagepreview": "large",
+      "priority": null,
+      "frequency": "default",
+      "local_seo": null,
+      "breadcrumb_settings": null,
+      "limit_modified_date": false,
+      "ai": {
+        "faqs": [],
+        "keyPoints": [],
+        "titles": [],
+        "descriptions": [],
+        "socialPosts": {
+          "email": [],
+          "linkedin": [],
+          "twitter": [],
+          "facebook": [],
+          "instagram": []
+        }
+      },
+      "created": "2025-12-10 11:08:29",
+      "updated": "2026-09-11 14:17:47",
+      "seo_analyzer_scan_date": null,
+      "focus_keyword": null,
+      "additional_keywords": null,
+      "truseo_locale": null
+    },
+    "aioseo_breadcrumb": "<div class=\"aioseo-breadcrumbs\"><span class=\"aioseo-breadcrumb\">\n\t\t\t<a href=\"https://edunite2serve.org/\" title=\"Home\">Home</a>\n\t\t</span><span class=\"aioseo-breadcrumb-separator\">»</span><span class=\"aioseo-breadcrumb\">\n\t\t\tVirtual Learning Community (VLC)\n\t\t</span></div>",
+    "aioseo_breadcrumb_json": [
+      {
+        "label": "Home",
+        "link": "https://edunite2serve.org/"
+      },
+      {
+        "label": "Virtual Learning Community (VLC)",
+        "link": "https://edunite2serve.org/all-project/reports/"
+      }
+    ],
+    "_links": {
+      "self": [
+        {
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project/4915",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://edunite2serve.org/wp-json/wp/v2/types/project"
+        }
+      ],
+      "author": [
+        {
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/users/1"
+        }
+      ],
+      "replies": [
+        {
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/comments?post=4915"
+        }
+      ],
+      "version-history": [
+        {
+          "count": 1,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project/4915/revisions"
+        }
+      ],
+      "predecessor-version": [
+        {
+          "id": 4916,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project/4915/revisions/4916"
+        }
+      ],
+      "wp:featuredmedia": [
+        {
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/media/4855"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "https://edunite2serve.org/wp-json/wp/v2/media?parent=4915"
+        }
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "project_category",
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project_category?post=4915"
+        },
+        {
+          "taxonomy": "upstream_tag",
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/upstream_tag?post=4915"
+        },
+        {
+          "taxonomy": "project-cat",
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project-cat?post=4915"
+        },
+        {
+          "taxonomy": "project-tag",
+          "embeddable": true,
+          "href": "https://edunite2serve.org/wp-json/wp/v2/project-tag?post=4915"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,45 @@
+Smart Online Certificate Fees Collection Form
+Please enable JavaScript in your browser to complete this form.
+Please enable JavaScript in your browser to complete this form.
+Student Full Name
+*
+First
+Last
+Student Email Address
+*
+Certificate Fees Amount
+*
+Certificate Type
+*
+--- Select Choice ---
+Basic Smart Online Certificate
+Advanced Smart Online Certificate
+Professional Smart Online Certificate
+Other Smart Online Certificate
+Select Payment Method for Smart Online Certificate Fees Collection
+*
+Mobile Money
+Paypal
+Other Approved Payment Method
+Online Certificate Fees (Single Item)
+Price:
+&#036;0.00
+Country Fee Certificate
+Total Certificate Fees Payable
+&#036;0.00
+Additional Notes about Smart Online Certificate Fees Collection
+Country Type
+*
+--- Select Choice ---
+Developing Country
+Developed Country
+Select whether your country is classified as developing or developed to apply the correct fee.
+Developing Country Fee
+Price:
+&#036;10.00
+Applies if you selected Developing Country.
+Developed Country Fee
+Price:
+&#036;25.00
+Applies if you selected Developed Country.
+Pay & Submit

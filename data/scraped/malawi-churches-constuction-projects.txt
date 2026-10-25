@@ -1,0 +1,35 @@
+Top Donation
+$0.00
+Average Donation
+$0.00
+Donate
+Notice:
+Test mode is enabled. While in test mode no live donations are processed.
+&#036;
+Donation Amount:
+&#036;10.00
+&#036;25.00
+&#036;50.00
+&#036;100.00
+&#036;250.00
+Custom Amount
+Select Payment Method
+Test Donation
+Offline Donation
+Personal Info
+First Name
+*
+Last Name
+Email Address
+*
+Donation Total:
+&#36;100.00
+The Malawi Churches Construction Projects aim to strengthen local communities by providing them with safe and welcoming.
+Recent Donations
+Every campaign starts with one donation.
+Be the one to make it happen!
+Be the first
+Top Donors
+No top donors listed yet.
+Be one of the first to make an impact!
+Be the first donor
