@@ -81,9 +81,9 @@ export default function Hero({
           {isHome ? (
             <>
               {/* Mobile 3-line layout: centered, exact flow */}
-              <h1 className="m-0 font-sans font-bold leading-[1.14] tracking-[-.04em] text-center lg:hidden text-[clamp(1.9rem,6.5vw,2.9rem)]">
+              <h1 className="m-0 font-sans font-bold leading-[1.14] tracking-[-.04em] text-center lg:hidden text-[clamp(1.9rem,6.5vw,2.9rem)] ">
                 <span
-                  className="block motion-safe:animate-hero-title"
+                  className="block motion-safe:animate-hero-title mt-[7vh]"
                   style={{ animationDelay: "0ms" }}
                 >
                   Giving Help To Those

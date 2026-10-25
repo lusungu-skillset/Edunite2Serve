@@ -67,13 +67,12 @@ export default function MobileMenu() {
           <span className="sr-only">Menu</span>
         </SheetTrigger>
 
-        <SheetContent side="right" className="w-[min(380px,calc(100vw-32px))] bg-[#f8faf4] p-6 flex flex-col justify-between overflow-y-auto">
+        <SheetContent
+          side="right"
+          className="w-full data-[side=right]:w-full max-w-full data-[side=right]:max-w-none sm:data-[side=right]:max-w-none border-0 data-[side=right]:border-l-0 bg-[#f8faf4] p-6 flex flex-col justify-between overflow-y-auto"
+        >
+          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
           <div>
-            <SheetHeader className="p-0 pb-6 text-left">
-              <SheetTitle className="font-brand text-lg font-bold text-brand-forest uppercase tracking-wider">
-                Edunite2Serve
-              </SheetTitle>
-            </SheetHeader>
 
             <nav aria-label="Mobile navigation">
               <Accordion multiple className="w-full">
@@ -81,7 +80,7 @@ export default function MobileMenu() {
                   <div key={item.label} className="border-b border-[#edf0e9]">
                     {item.children?.length ? (
                       <AccordionItem value={item.label} className="border-0">
-                        <AccordionTrigger className="py-3.5 font-brand text-base font-bold uppercase text-[#2D3F12] hover:text-brand-green hover:no-underline cursor-pointer">
+                        <AccordionTrigger className="py-3.5 font-brand text-base font-bold lowercase text-[#2D3F12] hover:text-brand-green hover:no-underline cursor-pointer">
                           <span>{item.label}</span>
                         </AccordionTrigger>
                         <AccordionContent className="pb-3 pt-0">
@@ -125,7 +124,7 @@ export default function MobileMenu() {
                       </AccordionItem>
                     ) : (
                       <Link
-                        className="flex py-3.5 font-brand text-base font-bold uppercase text-[#2D3F12] hover:text-brand-green transition-colors"
+                        className="flex py-3.5 font-brand text-base font-bold lowercase text-[#2D3F12] hover:text-brand-green transition-colors"
                         href={item.href}
                         aria-current={pathname === item.href ? "page" : undefined}
                         onClick={() => setIsOpen(false)}
@@ -141,7 +140,7 @@ export default function MobileMenu() {
 
           <div className="pt-6">
             <Button
-              className="donate-attention flex min-h-16 w-full items-center justify-between gap-[18px] whitespace-nowrap rounded-[15px] border-0 bg-[#2b4012] py-[7px] pl-[22px] pr-2 font-brand text-base font-medium uppercase text-white hover:bg-[#3b531a] h-auto"
+              className="donate-attention flex min-h-16 w-full items-center justify-between gap-[18px] whitespace-nowrap rounded-[15px] border-0 bg-[#2b4012] py-[7px] pl-[22px] pr-2 font-brand text-base font-medium lowercase text-white hover:bg-[#3b531a] h-auto"
               render={<Link href={donationUrl} onClick={() => setIsOpen(false)} />}
             >
               Donate Now
