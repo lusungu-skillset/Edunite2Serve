@@ -111,13 +111,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute inset-x-6 bottom-6 flex flex-wrap items-center justify-between gap-4 text-white">
+              <div className="absolute inset-x-6 bottom-6 flex items-center justify-between text-white">
                 <span className="flex items-center gap-2 text-sm font-semibold drop-shadow-sm">
                   <MapPin className="h-4 w-4 text-brand-lime" />
                   {project.location}
-                </span>
-                <span className="rounded-full bg-white/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
-                  Verified Initiative
                 </span>
               </div>
             </div>
@@ -125,24 +122,13 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <div className="p-6 sm:p-10 lg:p-12">
               {/* Highlight / Metric Bar */}
               {project.impactMetrics && (
-                <div className="rounded-2xl border border-[#d2e4cb] bg-[#f0f6ee] p-5 sm:p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-forest text-brand-lime">
-                      <Sparkles className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <p className="m-0 text-xs font-bold uppercase tracking-wider text-brand-green">
-                        Key Community Impact
-                      </p>
-                      <p className="m-0 font-sans text-base sm:text-lg font-bold text-brand-forest mt-0.5">
-                        {project.impactMetrics}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-forest bg-white px-3.5 py-1.5 rounded-full border border-[#cbdac7] shadow-xs">
-                    <ShieldCheck className="h-4 w-4 text-brand-green" />
-                    Direct Field Oversight
-                  </span>
+                <div className="rounded-2xl border border-[#d2e4cb] bg-[#f0f6ee] p-5 sm:p-6 mb-8">
+                  <p className="m-0 text-xs font-bold uppercase tracking-wider text-brand-green">
+                    Impact & Reach
+                  </p>
+                  <p className="m-0 font-sans text-base sm:text-lg font-bold text-brand-forest mt-1">
+                    {project.impactMetrics}
+                  </p>
                 </div>
               )}
 
@@ -195,11 +181,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               {/* Dedicated Donation & Support Section */}
               <div className="mt-12 rounded-3xl border border-[#cbe1c7] bg-gradient-to-br from-[#f2f8f0] via-[#eaf4e6] to-[#ddedea] p-8 sm:p-10 lg:p-12 shadow-xs">
                 <div className="max-w-2xl">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-green bg-white/80 px-3 py-1 rounded-full border border-[#cbdcc8]">
-                    <Heart className="h-3.5 w-3.5 fill-current text-brand-green" />
+                  <p className="m-0 text-xs font-bold uppercase tracking-wider text-brand-green">
                     Direct Mission Support
-                  </span>
-                  <h3 className="mt-3 font-sans text-2xl sm:text-3xl font-extrabold text-brand-forest leading-tight">
+                  </p>
+                  <h3 className="mt-2 font-sans text-2xl sm:text-3xl font-extrabold text-brand-forest leading-tight">
                     Support the {project.title}
                   </h3>
                   <p className="mt-2 text-sm sm:text-base text-brand-muted leading-relaxed">

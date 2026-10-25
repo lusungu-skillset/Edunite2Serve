@@ -169,16 +169,15 @@ export default function GalleryView({ items }: { items?: GalleryItem[] } = {}) {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
 
-              <div className="absolute left-4 top-4">
-                <Badge className="bg-brand-forest/90 text-brand-lime text-xs font-bold uppercase tracking-wider backdrop-blur-xs border-0 px-3 py-1">
-                  {item.category}
-                </Badge>
-              </div>
-
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <div className="flex items-center gap-1 text-[11px] font-semibold text-brand-lime mb-1">
-                  <MapPin className="h-3 w-3" />
-                  <span>{item.location}</span>
+                <div className="flex items-center justify-between text-[11px] font-semibold text-brand-lime mb-1">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    <span>{item.location}</span>
+                  </span>
+                  <span className="uppercase tracking-wider text-[10px] text-white/80">
+                    {item.category}
+                  </span>
                 </div>
                 <h3 className="m-0 font-sans text-lg font-bold leading-snug line-clamp-2">
                   {item.title}

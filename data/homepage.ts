@@ -5,8 +5,8 @@ export const homepageContent = {
   hero: {
     titleLines: [
       { text: "Giving Help To Those" },
-      { text: "People Who" },
-      { text: "Need It" },
+      { text: "People Who Need" },
+      { text: "It." },
     ],
     image: {
       src: "/images/homepage-community-learning.jpg",

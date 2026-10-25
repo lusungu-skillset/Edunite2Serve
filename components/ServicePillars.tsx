@@ -3,12 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  BookOpenText,
   ChevronLeft,
   ChevronRight,
   HandHeart,
   Play,
-  Sprout,
 } from "lucide-react";
 import * as React from "react";
 import { homepageContent } from "@/data/homepage";
@@ -18,23 +16,7 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-function PillarIcon({ name }: { name: string }) {
-  const className = "h-5 w-5";
-
-  switch (name) {
-    case "education":
-      return <BookOpenText aria-hidden="true" className={className} />;
-    case "service":
-      return <HandHeart aria-hidden="true" className={className} />;
-    case "development":
-      return <Sprout aria-hidden="true" className={className} />;
-    default:
-      return null;
-  }
-}
 
 export default function ServicePillars() {
   const { eyebrow, title, description, items } = homepageContent.servicePillars;
@@ -136,18 +118,6 @@ export default function ServicePillars() {
                       className="absolute inset-0 bg-gradient-to-t from-[#031c10]/95 via-[#031c10]/38 to-[#031c10]/12"
                     />
                     <div className="relative z-10 flex h-full flex-col p-5 sm:p-6 lg:p-7">
-                      <div className="flex items-center justify-between gap-3">
-                        <Badge
-                          className="border border-white/30 bg-[#07361f]/55 px-3 py-[7px] text-[10px] font-extrabold uppercase tracking-[.12em] text-white backdrop-blur-sm"
-                          variant="outline"
-                        >
-                          0{originalIndex + 1} / {item.title}
-                        </Badge>
-                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/95 text-brand-green shadow-[0_4px_14px_rgba(0,0,0,.14)]">
-                          <PillarIcon name={item.icon} />
-                        </span>
-                      </div>
-
                       {item.icon === "service" && (
                         <a
                           aria-label="Watch the Edunite2Serve community story"

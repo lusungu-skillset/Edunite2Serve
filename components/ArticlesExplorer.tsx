@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { articles as defaultArticles, type Article, articleCategories } from "@/data/articles";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -109,23 +108,20 @@ export default function ArticlesExplorer({
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute left-4 top-4">
-                    <Badge className="bg-brand-forest/90 text-brand-lime text-xs font-bold uppercase tracking-wider backdrop-blur-xs border-0 px-3 py-1">
-                      {article.category}
-                    </Badge>
-                  </div>
                 </Link>
 
                 <div className="p-6">
-                  <div className="flex items-center gap-4 text-xs font-semibold text-brand-muted/80 mb-3">
+                  <div className="flex items-center gap-2.5 text-xs font-semibold text-brand-muted mb-2.5">
+                    <span className="font-bold uppercase tracking-wider text-brand-green">
+                      {article.category}
+                    </span>
+                    <span>·</span>
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-brand-green" />
                       {article.formattedDate}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5 text-brand-green" />
-                      {article.readTime}
-                    </span>
+                    <span>·</span>
+                    <span>{article.readTime}</span>
                   </div>
 
                   <h3 className="m-0 font-sans text-xl font-bold leading-tight text-brand-forest group-hover:text-brand-green transition-colors line-clamp-2">

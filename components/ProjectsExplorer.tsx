@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowRight, MapPin, Search } from "lucide-react";
 import { projectDirectory, type Project } from "@/data/projects";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { donationUrl } from "@/data/navigation";
@@ -111,17 +110,17 @@ export default function ProjectsExplorer({
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute left-4 top-4">
-                    <Badge className="bg-brand-forest/90 text-brand-lime text-xs font-bold uppercase tracking-wider backdrop-blur-xs border-0 px-3 py-1">
-                      {project.category}
-                    </Badge>
-                  </div>
                 </Link>
 
                 <div className="p-6">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-green mb-2">
-                    <MapPin className="h-3.5 w-3.5 shrink-0" />
-                    <span className="line-clamp-1">{project.location}</span>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-brand-green">
+                      {project.category}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs font-medium text-brand-muted line-clamp-1">
+                      <MapPin className="h-3.5 w-3.5 text-brand-green shrink-0" />
+                      {project.location}
+                    </span>
                   </div>
 
                   <h3 className="m-0 font-sans text-xl font-bold leading-tight text-brand-forest group-hover:text-brand-green transition-colors">
@@ -137,9 +136,9 @@ export default function ProjectsExplorer({
                   </CardContent>
 
                   {project.highlight && (
-                    <div className="mt-4 rounded-xl bg-[#f5f8f2] p-3 text-xs font-semibold text-brand-forest border border-[#e4ede1]">
-                      ✦ {project.highlight}
-                    </div>
+                    <p className="mt-4 text-xs font-semibold text-brand-forest/90">
+                      {project.highlight}
+                    </p>
                   )}
                 </div>
               </div>

@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import type { NewsSectionContent } from "@/data/news";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default function NewsUpdates({
@@ -220,38 +219,23 @@ export default function NewsUpdates({
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
-
-                      {/* Category Badge */}
-                      <div className="absolute left-4 top-4">
-                        <Badge className="bg-brand-forest text-brand-lime text-[11px] font-extrabold uppercase tracking-wider border-0 shadow-xs px-3 py-1">
-                          {item.label}
-                        </Badge>
-                      </div>
-
-                      {/* Center Card Status Pill */}
-                      {isCenter && (
-                        <div className="absolute right-4 top-4">
-                          <span className="flex items-center gap-1 rounded-full bg-brand-green px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-xs">
-                            <span className="h-1.5 w-1.5 rounded-full bg-brand-lime animate-pulse" />
-                            Latest
-                          </span>
-                        </div>
-                      )}
                     </div>
 
                     {/* Card Content Block */}
                     <div className="flex flex-1 flex-col justify-between p-6">
                       <div>
                         {/* Meta info */}
-                        <div className="flex items-center gap-3 text-xs font-semibold text-brand-muted/80 mb-2.5">
+                        <div className="flex items-center gap-2.5 text-xs font-semibold text-brand-muted mb-2.5">
+                          <span className="font-bold uppercase tracking-wider text-brand-green">
+                            {item.label}
+                          </span>
+                          <span>·</span>
                           <span className="flex items-center gap-1">
                             <Calendar className="h-3.5 w-3.5 text-brand-green" />
                             {item.date}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3.5 w-3.5 text-brand-green" />
-                            {item.readTime}
-                          </span>
+                          <span>·</span>
+                          <span>{item.readTime}</span>
                         </div>
 
                         {/* Title */}

@@ -165,8 +165,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
                         key={index}
                         className="my-8 rounded-2xl border border-[#d8e3d5] bg-[#fafcf9] p-6 sm:p-8"
                       >
-                        <h3 className="m-0 font-sans text-xl font-bold text-brand-forest mb-4 flex items-center gap-2">
-                          <Sparkles className="h-5 w-5 text-brand-green" />
+                        <h3 className="m-0 font-sans text-xl font-bold text-brand-forest mb-4">
                           {paragraph}
                         </h3>
                       </div>
@@ -185,9 +184,8 @@ export default async function NewsDetailPage({ params }: PageProps) {
               <div className="mt-12 rounded-3xl border border-[#cbe1c7] bg-gradient-to-br from-[#f2f8f0] to-[#e4f0e0] p-8 sm:p-10">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                   <div>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-brand-green">
-                      <Heart className="h-3.5 w-3.5 fill-current" />
-                      Make a Real Difference
+                    <span className="text-xs font-bold uppercase tracking-wider text-brand-green">
+                      Support Grassroots Impact
                     </span>
                     <h3 className="mt-1 font-sans text-2xl font-bold text-brand-forest">
                       Help Us Continue This Life-Changing Work

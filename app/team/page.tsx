@@ -51,15 +51,6 @@ function TeamCards({ team }: { team: readonly Member[] }) {
               </p>
             </CardContent>
           </div>
-
-          <div className="mt-6 pt-4 border-t border-[#edf2ea] flex items-center justify-between">
-            <span className="text-xs font-bold text-brand-forest bg-[#e9f2e4] px-3 py-1 rounded-full">
-              Edunite2Serve Leader
-            </span>
-            <span className="text-xs text-brand-muted font-medium">
-              Verified
-            </span>
-          </div>
         </Card>
       ))}
     </div>

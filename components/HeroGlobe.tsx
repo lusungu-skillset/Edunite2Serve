@@ -103,20 +103,6 @@ export default function HeroGlobe() {
       <div className="pointer-events-none absolute -inset-10 rounded-full bg-radial from-brand-green/25 via-brand-forest/40 to-transparent blur-3xl" />
       <div className="pointer-events-none absolute inset-0 bg-radial from-brand-lime/10 via-transparent to-transparent blur-2xl" />
 
-      {/* Floating Mission Badge Top Left */}
-   
-
-      {/* Floating Impact Card Bottom Right with photo snippet */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.7 }}
-        whileHover={{ scale: 1.03 }}
-        className="absolute bottom-2 right-2 sm:bottom-6 sm:right-6 z-20 flex items-center gap-3 rounded-2xl border border-white/25 bg-brand-forest/90 p-2.5 sm:p-3 shadow-2xl backdrop-blur-md max-w-[280px]"
-      >
-       
-      </motion.div>
-
       {/* 3D WebGL Canvas Globe */}
       <div className="relative aspect-square w-full max-w-[min(340px,calc(100vw-36px))] sm:max-w-[560px] lg:max-w-[680px]">
         <canvas
