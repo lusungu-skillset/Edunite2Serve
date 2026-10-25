@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
+import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 import {
   ArrowRight,
   Calendar,
@@ -14,32 +15,23 @@ import {
   Play,
   Quote,
   Sparkles,
-  User,
 } from "lucide-react";
-import type { NewsSectionContent, NewsStory } from "@/data/news";
+import type { NewsSectionContent } from "@/data/news";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { donationUrl } from "@/data/navigation";
 
 export default function NewsUpdates({
   content,
 }: {
   content: NewsSectionContent;
 }) {
+  const router = useRouter();
   const { eyebrow, title, description, items, href, hrefLabel, itemLinkLabel } =
     content;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [activeStory, setActiveStory] = useState<NewsStory | null>(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
@@ -75,9 +67,9 @@ export default function NewsUpdates({
     }
   };
 
-  // Auto-advance news posts from right to left every 4.5 seconds
+  // Auto-advance news posts every 3 seconds (smooth, brisk transition)
   useEffect(() => {
-    if (isPaused || activeStory !== null) return;
+    if (isPaused) return;
 
     const prefersReducedMotion =
       typeof window !== "undefined" &&
@@ -87,10 +79,10 @@ export default function NewsUpdates({
 
     const timer = setInterval(() => {
       handleNext();
-    }, 4500);
+    }, 3000);
 
     return () => clearInterval(timer);
-  }, [isPaused, activeStory, handleNext]);
+  }, [isPaused, handleNext]);
 
   return (
     <section
@@ -99,103 +91,97 @@ export default function NewsUpdates({
       aria-labelledby="news-updates-heading"
     >
       <div className="mx-auto w-full max-w-[1720px] px-10 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]">
-        {/* Section Header with Homepage Signature Style */}
-        <div className="mb-[40px] flex items-end justify-between gap-[25px] max-[760px]:flex-col max-[760px]:items-start max-[760px]:gap-[19px]">
-          <div className="mb-0 max-w-[760px]">
-            {/* Signature Eyebrow: Cursive font-brand + rule + sparkle */}
-            <div className="mb-[18px] flex w-full items-center gap-4 text-left">
-              <p className="giving-purpose-heading m-0 whitespace-nowrap font-brand text-[clamp(24px,3vw,38px)] font-extrabold italic leading-[1.1] tracking-[-.04em] text-[#00876f]">
+        {/* Section Header */}
+        <div className="mb-12 flex items-end justify-between gap-6 max-[880px]:flex-col max-[880px]:items-start">
+          <div className="max-w-[760px]">
+            <div className="mb-4 flex items-center gap-3">
+              <Sparkles className="h-5 w-5 text-brand-green" />
+              <p className="giving-purpose-heading m-0 font-brand text-[clamp(20px,2.2vw,28px)] font-extrabold italic text-[#00876f]">
                 {eyebrow}
               </p>
-              <span
-                aria-hidden="true"
-                className="giving-purpose-rule h-px min-w-[22px] flex-1 max-w-[120px] bg-[#83b9a7]"
-              />
-              <svg
-                aria-hidden="true"
-                className="giving-purpose-sparkle h-[19px] w-[19px] shrink-0 text-[#00876f]"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="m12 2 2.45 7.55L22 12l-7.55 2.45L12 22l-2.45-7.55L2 12l7.55-2.45L12 2Z" />
-              </svg>
+              <span className="h-px flex-1 bg-[#83b9a7] min-w-4" />
             </div>
-
             <h2
-              className="m-0 font-sans text-[clamp(34px,4.2vw,54px)] font-bold leading-[1.12] tracking-[-.035em] text-brand-forest"
               id="news-updates-heading"
+              className="m-0 font-sans text-[clamp(34px,4vw,52px)] font-bold tracking-tight text-brand-forest leading-[1.12]"
             >
               {title}
             </h2>
-            <p className="mb-0 mt-4 max-w-[720px] text-[17px] leading-[1.75] text-brand-muted sm:text-[18px]">
+            <p className="mt-3 text-base sm:text-lg leading-relaxed text-brand-muted max-w-[680px]">
               {description}
             </p>
           </div>
 
-          <Button
-            className="rounded-full bg-brand-forest hover:bg-brand-green text-brand-lime hover:text-white font-bold text-sm px-6 py-3 h-auto shadow-sm shrink-0"
-            render={<Link href={href} />}
-          >
-            {hrefLabel} <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
+          {/* Action CTAs & Controls */}
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsPaused(!isPaused)}
+              aria-label={isPaused ? "Resume auto-rotation" : "Pause auto-rotation"}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#cbd9c8] bg-white text-brand-forest hover:bg-[#eef5eb] transition-colors"
+            >
+              {isPaused ? <Play className="h-4 w-4 fill-current ml-0.5" /> : <Pause className="h-4 w-4" />}
+            </button>
+
+            <Button
+              className="rounded-full bg-brand-forest hover:bg-brand-green text-white font-bold text-sm px-6 py-2.5 h-11 shadow-sm"
+              render={<Link href={href} />}
+            >
+              {hrefLabel}
+              <ArrowRight className="h-4 w-4 ml-1.5" />
+            </Button>
+          </div>
         </div>
 
-        {/* 180° Circular Pattern Motion Carousel */}
+        {/* 180° Circular Orbit Carousel Container */}
         <div
-          className="relative mx-auto w-full overflow-hidden py-10"
-          style={{ perspective: "1400px" }}
+          className="relative mx-auto mt-6 w-full max-w-[1400px] select-none"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Subtle Ambient Depth Arc Glow */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[90%] max-w-[1200px] rounded-full bg-gradient-to-r from-brand-lime/10 via-brand-green/10 to-brand-orange/10 blur-3xl opacity-70"
-          />
-
-          {/* 3D Arc Track */}
-          <div
-            className="relative mx-auto flex h-[460px] sm:h-[500px] w-full max-w-[min(340px,calc(100vw-36px))] sm:max-w-[400px] md:max-w-[430px] items-center justify-center select-none"
-            style={{ transformStyle: "preserve-3d" }}
-          >
+          <div className="relative h-[530px] sm:h-[560px] w-full flex items-center justify-center overflow-visible">
             {items.map((item, index) => {
-              // Calculate shortest circular offset on 180° circular cylinder
-              let offset = ((index - currentIndex) % total + total) % total;
+              // Calculate angular position on a 180-degree semicircular arc
+              let offset = (index - currentIndex) % total;
               if (offset > total / 2) offset -= total;
+              if (offset < -total / 2) offset += total;
 
-              // Only render items within the 180° circular arc [-2, 2] and buffer edge [3, -3]
-              const isVisible = Math.abs(offset) <= 2;
+              // Hide items that are too far behind the arc for smooth performance
+              if (Math.abs(offset) > 2) {
+                return null;
+              }
+
               const isCenter = offset === 0;
 
-              // 180-degree circular pattern geometry:
-              // Cards enter from the right (positive offset, rotateY inwards -25° to -45°)
-              // Peak front and center at 0° (scale 1.0, rotateY 0°)
-              // Exit to the left (negative offset, rotateY outwards +25° to +45°)
-              const xPercent = offset * 70;
-              const rotateY = -offset * 26;
-              const rotateZ = offset * 2.5;
-              const scale = isCenter
-                ? 1
-                : Math.max(0.72, 1 - Math.abs(offset) * 0.14);
+              // Trigonometric 3D layout coordinates along a 180° arc
+              const angle = (offset * Math.PI) / 4.2; // spacing angle
+              const radiusX = 460; // horizontal arc spread
+              const radiusY = 40;  // depth curvature
+
+              const xTranslate = Math.sin(angle) * radiusX;
+              const yTranslate = (1 - Math.cos(angle)) * radiusY;
               const zTranslate = -Math.abs(offset) * 110;
-              const opacity =
-                Math.abs(offset) > 2 ? 0 : Math.abs(offset) === 2 ? 0.45 : Math.abs(offset) === 1 ? 0.86 : 1;
+              const rotateY = offset * -14; // face toward the center viewer
+              const rotateZ = offset * 2.5;  // gentle arc tilt
+              const scale = 1 - Math.abs(offset) * 0.14;
+              const opacity = 1 - Math.abs(offset) * 0.28;
               const zIndex = 20 - Math.abs(offset) * 5;
+
+              const storyHref = item.href || `/news/${item.slug || item.id}`;
 
               return (
                 <motion.div
                   key={item.id}
-                  className="absolute inset-0 cursor-pointer"
+                  className="absolute w-[90vw] sm:w-[410px] md:w-[430px] cursor-pointer will-change-transform"
                   style={{
-                    transformStyle: "preserve-3d",
-                    pointerEvents: isVisible ? "auto" : "none",
+                    perspective: 1200,
                   }}
                   animate={{
-                    x: `${xPercent}%`,
-                    y: Math.abs(offset) * 12, // subtle 180-degree vertical downward sag forming a circular arc
+                    x: xTranslate,
+                    y: yTranslate,
                     rotateY,
                     rotateZ,
                     scale,
@@ -211,7 +197,7 @@ export default function NewsUpdates({
                   }}
                   onClick={() => {
                     if (isCenter) {
-                      setActiveStory(item);
+                      router.push(storyHref);
                     } else {
                       setCurrentIndex(index);
                     }
@@ -262,7 +248,6 @@ export default function NewsUpdates({
                             <Calendar className="h-3.5 w-3.5 text-brand-green" />
                             {item.date}
                           </span>
-                          <span>•</span>
                           <span className="flex items-center gap-1">
                             <Clock className="h-3.5 w-3.5 text-brand-green" />
                             {item.readTime}
@@ -288,10 +273,14 @@ export default function NewsUpdates({
                           {item.author}
                         </span>
 
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-brand-green group-hover:text-brand-forest transition-colors">
+                        <Link
+                          href={storyHref}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-brand-green group-hover:text-brand-forest transition-colors"
+                        >
                           {itemLinkLabel}
                           <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
-                        </span>
+                        </Link>
                       </div>
                     </div>
                   </Card>
@@ -303,9 +292,10 @@ export default function NewsUpdates({
           {/* Carousel Navigation Bar (Prev / Next & Dots) */}
           <div className="mt-10 flex items-center justify-between gap-4 max-w-[680px] mx-auto px-4">
             <Button
+              type="button"
               aria-label="Previous news story"
               onClick={handlePrev}
-              className="h-11 w-11 rounded-full bg-brand-forest text-white hover:bg-brand-green shadow-md p-0 shrink-0"
+              className="h-11 w-11 rounded-full bg-brand-forest text-white hover:bg-brand-green shadow-md p-0 shrink-0 flex items-center justify-center cursor-pointer"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
@@ -328,93 +318,16 @@ export default function NewsUpdates({
             </div>
 
             <Button
+              type="button"
               aria-label="Next news story"
               onClick={handleNext}
-              className="h-11 w-11 rounded-full bg-brand-forest text-white hover:bg-brand-green shadow-md p-0 shrink-0"
+              className="h-11 w-11 rounded-full bg-brand-forest text-white hover:bg-brand-green shadow-md p-0 shrink-0 flex items-center justify-center cursor-pointer"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
           </div>
         </div>
       </div>
-
-      {/* Full News Story Modal Dialog */}
-      <Dialog
-        open={activeStory !== null}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) setActiveStory(null);
-        }}
-      >
-        <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-2xl md:max-w-3xl bg-white p-6 sm:p-8 rounded-2xl border border-[#dfe5db] shadow-2xl overflow-y-auto max-h-[90vh]">
-          {activeStory && (
-            <div className="space-y-5">
-              <div className="border-b border-[#edf2ea] pb-4">
-                <div className="flex items-center gap-2 mb-2.5">
-                  <Badge className="bg-brand-forest text-brand-lime text-xs font-bold uppercase tracking-wider border-0 px-3 py-1">
-                    {activeStory.category}
-                  </Badge>
-                  <span className="text-xs font-semibold text-brand-muted flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5" />
-                    {activeStory.date}
-                  </span>
-                  <span className="text-xs font-semibold text-brand-muted flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    {activeStory.readTime}
-                  </span>
-                </div>
-
-                <DialogTitle className="m-0 font-sans text-2xl sm:text-3xl font-bold leading-tight text-brand-forest">
-                  {activeStory.title}
-                </DialogTitle>
-
-                <p className="m-0 mt-2 text-xs font-semibold text-brand-green">
-                  Dispatched by {activeStory.author}
-                </p>
-              </div>
-
-              {/* Story Image */}
-              <div className="relative h-[260px] sm:h-[320px] w-full overflow-hidden rounded-xl bg-slate-100">
-                <Image
-                  src={activeStory.image}
-                  alt={activeStory.alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              {/* Story Full Content */}
-              <DialogDescription className="prose max-w-none text-[#24352a] text-base leading-[1.8] space-y-4 font-normal">
-                {activeStory.content ? (
-                  activeStory.content.split("\n\n").map((para, idx) => (
-                    <span key={idx} className="block m-0">
-                      {para}
-                    </span>
-                  ))
-                ) : (
-                  <p>{activeStory.description}</p>
-                )}
-              </DialogDescription>
-
-              {/* Story Footer Actions */}
-              <DialogFooter className="mt-4 pt-3 border-t border-[#edf2ea] bg-transparent flex flex-row items-center justify-end gap-3 -mx-0 -mb-0">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveStory(null)}
-                  className="rounded-xl px-5"
-                >
-                  Close
-                </Button>
-                <Button
-                  className="rounded-xl bg-brand-green hover:bg-brand-forest text-white font-bold px-6 border-0"
-                  render={<Link href={donationUrl} />}
-                >
-                  Support This Mission →
-                </Button>
-              </DialogFooter>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </section>
   );
 }

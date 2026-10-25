@@ -14,6 +14,7 @@ const mulish = Mulish({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://edunite2serve.org"),
   title: {
     default: "Edunite2Serve | Enterprise for Wholeness",
     template: "%s | Edunite2Serve",

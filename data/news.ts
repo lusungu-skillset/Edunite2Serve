@@ -2,6 +2,7 @@ import { articles } from "./articles";
 
 export type NewsStory = {
   id: string;
+  slug: string;
   title: string;
   description: string;
   image: string;
@@ -27,12 +28,13 @@ export type NewsSectionContent = {
 
 export const realNewsStories: NewsStory[] = articles.map((art) => ({
   id: String(art.id),
+  slug: art.slug,
   title: art.title,
   description: art.excerpt,
   image: art.image,
   alt: art.title,
   label: art.category,
-  href: "/news",
+  href: `/news/${art.slug}`,
   date: art.formattedDate,
   category: art.category,
   readTime: art.readTime,

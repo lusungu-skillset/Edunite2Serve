@@ -7,10 +7,7 @@ import {
   ArrowRight,
   Calendar,
   Clock,
-  Quote,
   Search,
-  Share2,
-  Tag,
   User,
 } from "lucide-react";
 import { articles as defaultArticles, type Article, articleCategories } from "@/data/articles";
@@ -18,14 +15,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { donationUrl } from "@/data/navigation";
 
 export default function ArticlesExplorer({
   articles = defaultArticles,
@@ -34,7 +23,6 @@ export default function ArticlesExplorer({
 } = {}) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeArticle, setActiveArticle] = useState<Article | null>(null);
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
@@ -110,7 +98,10 @@ export default function ArticlesExplorer({
               className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#dfe5db] bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div>
-                <div className="relative h-[220px] w-full overflow-hidden bg-slate-100">
+                <Link
+                  href={`/news/${article.slug}`}
+                  className="relative block h-[220px] w-full overflow-hidden bg-slate-100"
+                >
                   <Image
                     src={article.image}
                     alt={article.title}
@@ -123,7 +114,7 @@ export default function ArticlesExplorer({
                       {article.category}
                     </Badge>
                   </div>
-                </div>
+                </Link>
 
                 <div className="p-6">
                   <div className="flex items-center gap-4 text-xs font-semibold text-brand-muted/80 mb-3">
@@ -137,11 +128,10 @@ export default function ArticlesExplorer({
                     </span>
                   </div>
 
-                  <h3
-                    onClick={() => setActiveArticle(article)}
-                    className="m-0 font-sans text-xl font-bold leading-tight text-brand-forest group-hover:text-brand-green transition-colors cursor-pointer line-clamp-2"
-                  >
-                    {article.title}
+                  <h3 className="m-0 font-sans text-xl font-bold leading-tight text-brand-forest group-hover:text-brand-green transition-colors line-clamp-2">
+                    <Link href={`/news/${article.slug}`}>
+                      {article.title}
+                    </Link>
                   </h3>
 
                   <CardContent className="p-0 mt-3">
@@ -153,14 +143,13 @@ export default function ArticlesExplorer({
               </div>
 
               <div className="border-t border-[#edf2ea] p-4 px-6 bg-[#fafcfa] flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setActiveArticle(article)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-green hover:text-brand-forest transition-colors cursor-pointer"
+                <Link
+                  href={`/news/${article.slug}`}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-forest hover:text-brand-green transition-colors"
                 >
                   Read Story
                   <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                </Link>
 
                 <span className="text-[11px] font-semibold text-brand-muted">
                   By {article.author}
@@ -170,88 +159,6 @@ export default function ArticlesExplorer({
           ))}
         </div>
       )}
-
-      {/* Full Article Reader Dialog */}
-      <Dialog
-        open={activeArticle !== null}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) setActiveArticle(null);
-        }}
-      >
-        <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-2xl md:max-w-3xl bg-white p-6 sm:p-8 rounded-2xl border border-[#dfe5db] shadow-2xl overflow-y-auto max-h-[90vh]">
-          {activeArticle && (
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="border-b border-[#edf2ea] pb-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Badge className="bg-brand-forest text-brand-lime text-xs font-bold uppercase tracking-wider border-0 px-3 py-1">
-                    {activeArticle.category}
-                  </Badge>
-                  <span className="text-xs font-semibold text-brand-muted flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5" />
-                    {activeArticle.formattedDate}
-                  </span>
-                  <span className="text-xs font-semibold text-brand-muted flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    {activeArticle.readTime}
-                  </span>
-                </div>
-
-                <DialogTitle className="m-0 font-sans text-2xl sm:text-3xl font-bold leading-tight text-brand-forest">
-                  {activeArticle.title}
-                </DialogTitle>
-
-                <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-brand-green">
-                  <User className="h-3.5 w-3.5" />
-                  <span>Published by {activeArticle.author}</span>
-                </div>
-              </div>
-
-              {/* Featured Image */}
-              <div className="relative h-[280px] sm:h-[340px] w-full overflow-hidden rounded-xl bg-slate-100">
-                <Image
-                  src={activeArticle.image}
-                  alt={activeArticle.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              {/* Full Content */}
-              <div className="prose max-w-none text-[#24352a] text-base sm:text-[17px] leading-[1.8] space-y-4">
-                {activeArticle.content.split("\n\n").map((para, idx) => (
-                  <p key={idx} className="m-0">
-                    {para}
-                  </p>
-                ))}
-              </div>
-
-              {/* Footer CTA */}
-              <DialogFooter className="mt-6 pt-4 border-t border-[#edf2ea] bg-transparent flex flex-col sm:flex-row items-center justify-between gap-4 -mx-0 -mb-0">
-                <span className="text-xs text-brand-muted font-medium text-center sm:text-left">
-                  Edunite2Serve Malawi Humanitarian Dispatch
-                </span>
-                <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-                  <Button
-                    variant="outline"
-                    onClick={() => setActiveArticle(null)}
-                    className="rounded-xl px-5 w-full sm:w-auto"
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    className="rounded-xl bg-brand-green hover:bg-brand-forest text-white font-bold px-6 border-0 w-full sm:w-auto text-center justify-center"
-                    render={<Link href={donationUrl} />}
-                    onClick={() => setActiveArticle(null)}
-                  >
-                    Support This Initiative →
-                  </Button>
-                </div>
-              </DialogFooter>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

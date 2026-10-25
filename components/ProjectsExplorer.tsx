@@ -103,7 +103,7 @@ export default function ProjectsExplorer({
               className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#dfe5db] bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div>
-                <div className="relative h-[220px] w-full overflow-hidden bg-slate-100">
+                <Link href={`/projects/${project.slug}`} className="relative block h-[220px] w-full overflow-hidden bg-slate-100">
                   <Image
                     src={project.image}
                     alt={project.imageAlt}
@@ -116,7 +116,7 @@ export default function ProjectsExplorer({
                       {project.category}
                     </Badge>
                   </div>
-                </div>
+                </Link>
 
                 <div className="p-6">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-green mb-2">
@@ -125,7 +125,9 @@ export default function ProjectsExplorer({
                   </div>
 
                   <h3 className="m-0 font-sans text-xl font-bold leading-tight text-brand-forest group-hover:text-brand-green transition-colors">
-                    {project.title}
+                    <Link href={`/projects/${project.slug}`}>
+                      {project.title}
+                    </Link>
                   </h3>
 
                   <CardContent className="p-0 mt-3">
@@ -143,15 +145,18 @@ export default function ProjectsExplorer({
               </div>
 
               <div className="border-t border-[#edf2ea] p-4 px-6 bg-[#fafcfa] flex items-center justify-between">
-                <span className="text-xs font-bold text-brand-green">
-                  Active Mission
-                </span>
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-forest hover:text-brand-green transition-colors"
+                >
+                  Read Story
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
                 <Button
                   className="rounded-full bg-brand-green hover:bg-brand-forest text-white font-bold text-xs px-4 py-1.5 h-auto"
                   render={<Link href={donationUrl} />}
                 >
-                  Support Project
-                  <ArrowRight className="h-3 w-3 ml-1" />
+                  Donate
                 </Button>
               </div>
             </Card>

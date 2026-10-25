@@ -72,13 +72,14 @@ export default function AdminLoginPage() {
               </label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 required
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@edunite2serve.org"
-                className="h-11 rounded-xl border-[#d8e3d5] bg-[#fafcf9] text-sm"
+                className="h-11 rounded-xl border-[#d8e3d5] bg-[#fafcf9] text-sm text-brand-forest placeholder:text-brand-muted/70 focus:bg-white"
               />
             </div>
 
@@ -91,13 +92,14 @@ export default function AdminLoginPage() {
               </label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 required
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="h-11 rounded-xl border-[#d8e3d5] bg-[#fafcf9] text-sm"
+                className="h-11 rounded-xl border-[#d8e3d5] bg-[#fafcf9] text-sm text-brand-forest placeholder:text-brand-muted/70 focus:bg-white"
               />
             </div>
 

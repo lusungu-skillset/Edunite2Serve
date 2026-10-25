@@ -92,6 +92,11 @@ export async function getCmsProjects(): Promise<Project[]> {
   return localStore.projects;
 }
 
+export async function getCmsProjectBySlug(slug: string): Promise<Project | null> {
+  const projects = await getCmsProjects();
+  return projects.find((p) => p.slug === slug) || null;
+}
+
 export async function saveCmsProject(project: Project): Promise<{ success: boolean; error?: string }> {
   if (isSupabaseConfigured()) {
     const supabase = createClient();
@@ -171,6 +176,11 @@ export async function getCmsArticles(): Promise<Article[]> {
     }
   }
   return localStore.articles;
+}
+
+export async function getCmsArticleBySlug(slug: string): Promise<Article | null> {
+  const articles = await getCmsArticles();
+  return articles.find((a) => a.slug === slug || String(a.id) === slug) || null;
 }
 
 export async function saveCmsArticle(article: Partial<Article>): Promise<{ success: boolean; error?: string }> {

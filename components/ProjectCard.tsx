@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 type Project = (typeof projectDirectory)[number];
 
 export default function ProjectCard({ project }: { project: Project }) {
-  const projectHref = `/projects#${project.slug}`;
+  const projectHref = `/projects/${project.slug}`;
 
   return (
     <Card

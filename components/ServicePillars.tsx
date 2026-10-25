@@ -40,25 +40,9 @@ export default function ServicePillars() {
   const { eyebrow, title, description, items } = homepageContent.servicePillars;
   const storyVideoUrl = homepageContent.communityStory.videoUrl;
   const [api, setApi] = React.useState<CarouselApi>();
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  React.useEffect(() => {
-    if (!api) return;
-
-    const onSelect = () => {
-      setCanScrollPrev(api.canScrollPrev());
-      setCanScrollNext(api.canScrollNext());
-    };
-
-    onSelect();
-    api.on("select", onSelect);
-    api.on("reInit", onSelect);
-
-    return () => {
-      api.off("select", onSelect);
-    };
-  }, [api]);
+  // Duplicate items so that the carousel has enough slides to loop continuously on all screen sizes
+  const displayItems = React.useMemo(() => [...items, ...items], [items]);
 
   return (
     <section
@@ -102,19 +86,20 @@ export default function ServicePillars() {
             </p>
           </div>
 
+          {/* Carousel Arrows */}
           <div className="mt-1 flex shrink-0 items-center gap-3">
             <Button
+              type="button"
               aria-label="Previous service area"
-              className="h-14 w-14 rounded-full bg-brand-forest hover:bg-brand-green text-white shadow-[0_5px_16px_rgba(7,54,31,.12)] p-0"
-              disabled={!canScrollPrev}
+              className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-brand-forest hover:bg-brand-green text-white shadow-[0_5px_16px_rgba(7,54,31,.12)] p-0 flex items-center justify-center cursor-pointer transition-all active:scale-95"
               onClick={() => api?.scrollPrev()}
             >
               <ChevronLeft aria-hidden="true" className="h-6 w-6" strokeWidth={2.5} />
             </Button>
             <Button
+              type="button"
               aria-label="Next service area"
-              className="h-14 w-14 rounded-full bg-brand-green hover:bg-brand-forest text-white shadow-[0_5px_16px_rgba(7,54,31,.12)] p-0"
-              disabled={!canScrollNext}
+              className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-brand-green hover:bg-brand-forest text-white shadow-[0_5px_16px_rgba(7,54,31,.12)] p-0 flex items-center justify-center cursor-pointer transition-all active:scale-95"
               onClick={() => api?.scrollNext()}
             >
               <ChevronRight aria-hidden="true" className="h-6 w-6" strokeWidth={2.5} />
@@ -125,73 +110,76 @@ export default function ServicePillars() {
         <Carousel
           opts={{
             align: "start",
-            loop: false,
+            loop: true,
           }}
           setApi={setApi}
           className="w-full"
         >
           <CarouselContent className="-ml-4">
-            {items.map((item, itemIndex) => (
-              <CarouselItem
-                key={item.title}
-                className="pl-4 basis-full md:basis-1/2 xl:basis-1/3"
-              >
-                <article className="group relative flex h-[460px] min-w-0 flex-col overflow-hidden rounded-[22px] border border-white/70 bg-brand-forest shadow-[0_12px_34px_rgba(7,54,31,.14)] sm:h-[480px] xl:h-[450px]">
-                  <Image
-                    alt={item.imageAlt}
-                    className="object-cover transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.035]"
-                    fill
-                    sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
-                    src={item.image}
-                  />
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-[#031c10]/95 via-[#031c10]/38 to-[#031c10]/12"
-                  />
-                  <div className="relative z-10 flex h-full flex-col p-5 sm:p-6 lg:p-7">
-                    <div className="flex items-center justify-between gap-3">
-                      <Badge
-                        className="border border-white/30 bg-[#07361f]/55 px-3 py-[7px] text-[10px] font-extrabold uppercase tracking-[.12em] text-white backdrop-blur-sm"
-                        variant="outline"
-                      >
-                        0{itemIndex + 1} / {item.title}
-                      </Badge>
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/95 text-brand-green shadow-[0_4px_14px_rgba(0,0,0,.14)]">
-                        <PillarIcon name={item.icon} />
-                      </span>
-                    </div>
+            {displayItems.map((item, itemIndex) => {
+              const originalIndex = itemIndex % items.length;
+              return (
+                <CarouselItem
+                  key={`${item.title}-${itemIndex}`}
+                  className="pl-4 basis-full md:basis-1/2 xl:basis-1/3"
+                >
+                  <article className="group relative flex h-[460px] min-w-0 flex-col overflow-hidden rounded-[22px] border border-white/70 bg-brand-forest shadow-[0_12px_34px_rgba(7,54,31,.14)] sm:h-[480px] xl:h-[450px]">
+                    <Image
+                      alt={item.imageAlt}
+                      className="object-cover transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.035]"
+                      fill
+                      sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+                      src={item.image}
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0 bg-gradient-to-t from-[#031c10]/95 via-[#031c10]/38 to-[#031c10]/12"
+                    />
+                    <div className="relative z-10 flex h-full flex-col p-5 sm:p-6 lg:p-7">
+                      <div className="flex items-center justify-between gap-3">
+                        <Badge
+                          className="border border-white/30 bg-[#07361f]/55 px-3 py-[7px] text-[10px] font-extrabold uppercase tracking-[.12em] text-white backdrop-blur-sm"
+                          variant="outline"
+                        >
+                          0{originalIndex + 1} / {item.title}
+                        </Badge>
+                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/95 text-brand-green shadow-[0_4px_14px_rgba(0,0,0,.14)]">
+                          <PillarIcon name={item.icon} />
+                        </span>
+                      </div>
 
-                    {item.icon === "service" && (
-                      <a
-                        aria-label="Watch the Edunite2Serve community story"
-                        className="video-play-attention absolute left-1/2 top-[42%] z-10 grid h-[72px] w-[72px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-[5px] border-white/35 bg-brand-green text-white shadow-[0_8px_28px_rgba(0,0,0,.3)] transition-transform hover:scale-105 focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-brand-orange motion-reduce:transition-none"
-                        href={storyVideoUrl}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        <Play aria-hidden="true" className="ml-1 h-7 w-7 fill-current" />
-                      </a>
-                    )}
+                      {item.icon === "service" && (
+                        <a
+                          aria-label="Watch the Edunite2Serve community story"
+                          className="video-play-attention absolute left-1/2 top-[42%] z-10 grid h-[72px] w-[72px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-[5px] border-white/35 bg-brand-green text-white shadow-[0_8px_28px_rgba(0,0,0,.3)] transition-transform hover:scale-105 focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-brand-orange motion-reduce:transition-none"
+                          href={storyVideoUrl}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          <Play aria-hidden="true" className="ml-1 h-7 w-7 fill-current" />
+                        </a>
+                      )}
 
-                    <div className="mt-auto max-w-[430px]">
-                      <h3 className="mb-2 mt-0 font-sans text-[26px] font-bold leading-[1.16] tracking-[-.025em] text-white sm:text-[30px]">
-                        {item.title}
-                      </h3>
-                      <p className="mb-5 mt-0 max-w-[390px] text-[14px] leading-[1.65] text-white/90 sm:text-[15px]">
-                        {item.description}
-                      </p>
-                      <Button
-                        className="rounded-full bg-white px-[17px] text-[13px] font-bold text-brand-forest shadow-[0_5px_16px_rgba(0,0,0,.14)] hover:bg-brand-lime hover:text-brand-forest border-0 h-auto py-2.5"
-                        render={<Link href={item.href} />}
-                      >
-                        {item.action}
-                        <span aria-hidden="true" className="text-base">&rarr;</span>
-                      </Button>
+                      <div className="mt-auto max-w-[430px]">
+                        <h3 className="mb-2 mt-0 font-sans text-[26px] font-bold leading-[1.16] tracking-[-.025em] text-white sm:text-[30px]">
+                          {item.title}
+                        </h3>
+                        <p className="mb-5 mt-0 max-w-[390px] text-[14px] leading-[1.65] text-white/90 sm:text-[15px]">
+                          {item.description}
+                        </p>
+                        <Button
+                          className="rounded-full bg-white px-[17px] text-[13px] font-bold text-brand-forest shadow-[0_5px_16px_rgba(0,0,0,.14)] hover:bg-brand-lime hover:text-brand-forest border-0 h-auto py-2.5"
+                          render={<Link href={item.href} />}
+                        >
+                          {item.action}
+                          <span aria-hidden="true" className="text-base ml-1.5">&rarr;</span>
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              </CarouselItem>
-            ))}
+                  </article>
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
         </Carousel>
       </div>
