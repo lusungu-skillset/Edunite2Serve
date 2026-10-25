@@ -82,9 +82,24 @@ export default function Hero({
             <>
               {/* Mobile 3-line layout: centered, exact flow */}
               <h1 className="m-0 font-sans font-bold leading-[1.14] tracking-[-.04em] text-center lg:hidden text-[clamp(1.9rem,6.5vw,2.9rem)]">
-                <span className="block">Giving Help To Those</span>
-                <span className="block">People Who Need</span>
-                <span className="block">It.</span>
+                <span
+                  className="block motion-safe:animate-hero-title"
+                  style={{ animationDelay: "0ms" }}
+                >
+                  Giving Help To Those
+                </span>
+                <span
+                  className="block motion-safe:animate-hero-title"
+                  style={{ animationDelay: "300ms" }}
+                >
+                  People Who Need
+                </span>
+                <span
+                  className="block motion-safe:animate-hero-title"
+                  style={{ animationDelay: "600ms" }}
+                >
+                  It.
+                </span>
               </h1>
 
               {/* Desktop / PC layout: left-aligned, unchanged */}

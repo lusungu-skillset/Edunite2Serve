@@ -41,15 +41,19 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
 
         {/* Logo & Brand */}
-        <div className="flex flex-col items-center mb-8">
-          <Link href="/" className="mb-4 focus-visible:outline-none">
+        <div className="flex flex-col items-center mb-8 text-center">
+          <Link
+            href="/"
+            className="mb-4 inline-flex items-center justify-center p-3 rounded-2xl bg-white border border-[#dfe5db] shadow-xs hover:shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"
+          >
             <Image
               src="/images/brand/edunite2serve-logo.png"
               alt="Edunite2Serve"
-              width={64}
-              height={64}
-              className="h-16 w-auto object-contain"
+              width={264}
+              height={91}
               priority
+              quality={100}
+              className="h-12 w-auto object-contain"
             />
           </Link>
           <h1 className="font-sans text-2xl font-bold text-brand-forest m-0">
