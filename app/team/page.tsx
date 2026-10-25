@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
@@ -19,7 +20,8 @@ type Member = {
   name: string;
   role: string;
   bio: string;
-  initials: string;
+  initials?: string;
+  image?: string;
 };
 
 function TeamCards({ team }: { team: readonly Member[] }) {
@@ -28,29 +30,41 @@ function TeamCards({ team }: { team: readonly Member[] }) {
       {team.map((member) => (
         <Card
           key={member.name}
-          className="group flex flex-col justify-between rounded-2xl border border-[#dfe5db] bg-[#fafcf9] p-8 shadow-xs hover:shadow-md transition-all"
+          className="group flex flex-col items-center text-center rounded-2xl border border-[#dfe5db] bg-white p-7 sm:p-8 shadow-xs hover:shadow-md transition-all duration-300"
         >
-          <div>
-            <div className="flex items-center gap-4 mb-5">
-              <div className="grid h-16 w-16 place-items-center rounded-2xl bg-brand-forest text-brand-lime font-brand text-xl font-bold shadow-xs group-hover:scale-105 transition-transform">
-                {member.initials}
+          {/* Photo of Team member */}
+          <div className="relative h-32 w-32 sm:h-36 sm:w-36 rounded-full overflow-hidden mb-5 border-4 border-[#e8eee4] shadow-sm bg-[#e8eee4] shrink-0">
+            {member.image ? (
+              <Image
+                src={member.image}
+                alt={member.name}
+                fill
+                sizes="(max-width: 640px) 128px, 144px"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div className="grid h-full w-full place-items-center bg-brand-forest text-brand-lime font-brand text-2xl font-bold">
+                {member.initials || member.name.slice(0, 2).toUpperCase()}
               </div>
-              <div>
-                <h3 className="m-0 font-sans text-xl font-bold text-brand-forest">
-                  {member.name}
-                </h3>
-                <p className="m-0 text-xs font-semibold text-brand-green uppercase tracking-wide mt-1">
-                  {member.role}
-                </p>
-              </div>
-            </div>
-
-            <CardContent className="p-0">
-              <p className="m-0 text-sm leading-[1.7] text-brand-muted">
-                {member.bio}
-              </p>
-            </CardContent>
+            )}
           </div>
+
+          {/* Member Name */}
+          <h3 className="m-0 font-sans text-xl sm:text-[22px] font-bold text-brand-forest">
+            {member.name}
+          </h3>
+
+          {/* Position */}
+          <p className="m-0 text-xs sm:text-sm font-bold text-brand-green uppercase tracking-wider mt-1.5 mb-4">
+            {member.role}
+          </p>
+
+          {/* Description */}
+          <CardContent className="p-0">
+            <p className="m-0 text-sm leading-[1.75] text-brand-muted">
+              {member.bio}
+            </p>
+          </CardContent>
         </Card>
       ))}
     </div>

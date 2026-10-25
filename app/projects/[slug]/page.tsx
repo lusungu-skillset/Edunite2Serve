@@ -119,7 +119,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="p-6 sm:p-10 lg:p-12">
+            <div className="p-5 sm:p-10 lg:p-12">
               {/* Highlight / Metric Bar */}
               {project.impactMetrics && (
                 <div className="rounded-2xl border border-[#d2e4cb] bg-[#f0f6ee] p-5 sm:p-6 mb-8">
@@ -215,20 +215,20 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 </div>
 
                 {/* CTAs */}
-                <div className="mt-8 flex flex-wrap items-center gap-4">
+                <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 w-full sm:w-auto">
                   <Button
-                    className="rounded-full bg-brand-forest hover:bg-brand-green text-white font-bold text-base px-8 py-3.5 h-auto shadow-md"
+                    className="w-full sm:w-auto inline-flex items-center justify-center text-center whitespace-normal rounded-full bg-brand-forest hover:bg-brand-green text-white font-bold text-sm sm:text-base px-6 sm:px-8 py-3.5 h-auto shadow-md"
                     render={<Link href={donationUrl} />}
                   >
-                    Donate to Support This Project
-                    <ArrowRight className="h-4 w-4 ml-2" />
+                    <span>Donate to Support This Project</span>
+                    <ArrowRight className="h-4 w-4 ml-2 shrink-0" />
                   </Button>
                   <Button
-                    className="rounded-full border border-[#cbd9c8] bg-white hover:bg-[#f5f8f2] text-brand-forest font-bold text-base px-7 py-3.5 h-auto"
+                    className="w-full sm:w-auto inline-flex items-center justify-center text-center whitespace-normal rounded-full border border-[#cbd9c8] bg-white hover:bg-[#f5f8f2] text-brand-forest font-bold text-sm sm:text-base px-6 sm:px-7 py-3.5 h-auto"
                     render={<Link href="/opportunities/volunteer" />}
                     variant="outline"
                   >
-                    Volunteer for This Mission
+                    <span>Volunteer for This Mission</span>
                   </Button>
                 </div>
               </div>

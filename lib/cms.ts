@@ -416,6 +416,7 @@ export async function saveCmsTeamMember(member: any): Promise<{ success: boolean
         role: member.role,
         bio: member.bio,
         initials: member.initials,
+        image: member.image,
         order_index: member.order_index || 0,
       });
       if (error) return { success: false, error: error.message };

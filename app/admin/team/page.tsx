@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Edit, PlusCircle, Trash2, Users2 } from "lucide-react";
 import { aboutContent } from "@/data/about";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,6 +24,7 @@ export default function AdminTeamPage() {
     role: "",
     bio: "",
     initials: "",
+    image: "",
   });
 
   function handleSave(e: React.FormEvent) {
@@ -70,7 +72,7 @@ export default function AdminTeamPage() {
 
         <Button
           onClick={() => {
-            setCurrentMember({ name: "", role: "", bio: "", initials: "" });
+            setCurrentMember({ name: "", role: "", bio: "", initials: "", image: "" });
             setIsEditing(true);
           }}
           className="rounded-full bg-brand-green hover:bg-brand-forest text-white font-bold text-sm px-6 py-2.5 h-auto shadow-sm"
@@ -88,8 +90,19 @@ export default function AdminTeamPage() {
           >
             <div>
               <div className="flex items-center gap-3.5 mb-4">
-                <div className="grid h-14 w-14 place-items-center rounded-2xl bg-brand-forest text-brand-lime font-brand text-lg font-bold">
-                  {member.initials}
+                <div className="relative h-14 w-14 rounded-2xl overflow-hidden shrink-0 border border-[#dfe5db] bg-[#e8eee4]">
+                  {(member as any).image ? (
+                    <Image
+                      src={(member as any).image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-full w-full place-items-center bg-brand-forest text-brand-lime font-brand text-lg font-bold">
+                      {member.initials}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <h3 className="m-0 font-sans text-lg font-bold text-brand-forest">
@@ -117,7 +130,13 @@ export default function AdminTeamPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    setCurrentMember(member);
+                    setCurrentMember({
+                      name: member.name,
+                      role: member.role,
+                      bio: member.bio,
+                      initials: member.initials,
+                      image: (member as any).image || "",
+                    });
                     setIsEditing(true);
                   }}
                   className="h-7 px-2.5 text-xs font-bold"
@@ -173,6 +192,20 @@ export default function AdminTeamPage() {
                   setCurrentMember({ ...currentMember, role: e.target.value })
                 }
                 placeholder="e.g., Chief Executive Officer (CEO)"
+                className="rounded-xl border-[#d8e3d5]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-forest mb-1">
+                Photo URL (e.g. /images/team/grey-sagawa.jpg)
+              </label>
+              <Input
+                value={currentMember.image || ""}
+                onChange={(e) =>
+                  setCurrentMember({ ...currentMember, image: e.target.value })
+                }
+                placeholder="/images/team/member.jpg"
                 className="rounded-xl border-[#d8e3d5]"
               />
             </div>

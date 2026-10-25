@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -231,30 +232,43 @@ export default function AboutUsPage() {
             {leadership.map((leader) => (
               <Card
                 key={leader.name}
-                className="rounded-2xl border border-[#dfe5db] bg-[#fbfdfa] p-6 shadow-xs flex flex-col justify-between"
+                className="group flex flex-col items-center text-center rounded-2xl border border-[#dfe5db] bg-[#fbfdfa] p-7 shadow-xs hover:shadow-md transition-all duration-300"
               >
-                <div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="grid h-14 w-14 place-items-center rounded-2xl bg-brand-forest text-brand-lime font-brand text-lg font-bold">
+                {/* Photo of Team member */}
+                <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-full overflow-hidden mb-4 border-4 border-[#e8eee4] shadow-sm bg-[#e8eee4] shrink-0">
+                  {(leader as any).image ? (
+                    <Image
+                      src={(leader as any).image}
+                      alt={leader.name}
+                      fill
+                      sizes="(max-width: 640px) 112px, 128px"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="grid h-full w-full place-items-center bg-brand-forest text-brand-lime font-brand text-xl font-bold">
                       {leader.initials}
                     </div>
-                    <div>
-                      <h3 className="m-0 font-sans text-lg font-bold text-brand-forest">
-                        {leader.name}
-                      </h3>
-                      <p className="m-0 text-xs font-semibold text-brand-green uppercase tracking-wide">
-                        {leader.role}
-                      </p>
-                    </div>
-                  </div>
-                  <CardContent className="p-0">
-                    <p className="m-0 text-sm leading-[1.65] text-brand-muted">
-                      {leader.bio}
-                    </p>
-                  </CardContent>
+                  )}
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-[#edf2ea]">
+                {/* Member Name */}
+                <h3 className="m-0 font-sans text-lg sm:text-xl font-bold text-brand-forest">
+                  {leader.name}
+                </h3>
+
+                {/* Position */}
+                <p className="m-0 text-xs font-bold text-brand-green uppercase tracking-wider mt-1 mb-3">
+                  {leader.role}
+                </p>
+
+                {/* Description */}
+                <CardContent className="p-0">
+                  <p className="m-0 text-xs sm:text-sm leading-[1.65] text-brand-muted">
+                    {leader.bio}
+                  </p>
+                </CardContent>
+
+                <div className="mt-5 pt-3 border-t border-[#edf2ea] w-full">
                   <span className="text-[11px] font-semibold text-brand-forest bg-[#e9f2e4] px-2.5 py-1 rounded-full">
                     Malawi Mission Leader
                   </span>
