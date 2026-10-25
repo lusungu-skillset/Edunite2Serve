@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
@@ -11,9 +12,12 @@ export const metadata: Metadata = {
     "Read the latest dispatches, volunteer cooking classes, school partnerships, and farming updates from Edunite2Serve in Malawi.",
 };
 
-export default async function NewsPage() {
+async function ArticlesFeed() {
   const articlesList = await getCmsArticles();
+  return <ArticlesExplorer articles={articlesList} />;
+}
 
+export default function NewsPage() {
   return (
     <>
       <PageHeader
@@ -36,7 +40,9 @@ export default async function NewsPage() {
             description="Real stories of transformed families, empowered teachers, and thriving community gardens directly from our teams in Malawi."
           />
 
-          <ArticlesExplorer articles={articlesList} />
+          <Suspense fallback={<ArticlesExplorer />}>
+            <ArticlesFeed />
+          </Suspense>
         </div>
       </section>
     </>

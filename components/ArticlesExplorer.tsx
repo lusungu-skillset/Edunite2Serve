@@ -13,7 +13,7 @@ import {
   Tag,
   User,
 } from "lucide-react";
-import { type Article, articleCategories } from "@/data/articles";
+import { articles as defaultArticles, type Article, articleCategories } from "@/data/articles";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,10 +28,10 @@ import {
 import { donationUrl } from "@/data/navigation";
 
 export default function ArticlesExplorer({
-  articles,
+  articles = defaultArticles,
 }: {
-  articles: Article[];
-}) {
+  articles?: Article[];
+} = {}) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);

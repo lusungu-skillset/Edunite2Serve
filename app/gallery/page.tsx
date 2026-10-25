@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
@@ -11,9 +12,12 @@ export const metadata: Metadata = {
     "Visual journey through Edunite2Serve projects in Malawi—education at Mangunda, farming at Lakeside, cookery workshops, and community life.",
 };
 
-export default async function GalleryPage() {
+async function GalleryFeed() {
   const items = await getCmsGallery();
+  return <GalleryView items={items} />;
+}
 
+export default function GalleryPage() {
   return (
     <>
       <PageHeader
@@ -36,7 +40,9 @@ export default async function GalleryPage() {
             description="Every image represents real students with brighter horizons, farmers harvesting organic nutrition, and local volunteers serving with joy."
           />
 
-          <GalleryView items={items} />
+          <Suspense fallback={<GalleryView />}>
+            <GalleryFeed />
+          </Suspense>
         </div>
       </section>
     </>

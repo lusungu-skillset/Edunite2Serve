@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
@@ -11,9 +12,12 @@ export const metadata: Metadata = {
     "Explore Edunite2Serve's community initiatives in education, sustainable farming, clean food access, and local infrastructure across Malawi.",
 };
 
-export default async function ProjectsPage() {
+async function ProjectsFeed() {
   const projects = await getCmsProjects();
+  return <ProjectsExplorer projects={projects} />;
+}
 
+export default function ProjectsPage() {
   return (
     <>
       <PageHeader
@@ -36,7 +40,9 @@ export default async function ProjectsPage() {
             description="Every initiative is developed hand-in-hand with local Malawian leaders, ensuring dignity, sustainable agriculture, and long-term educational growth."
           />
 
-          <ProjectsExplorer projects={projects} />
+          <Suspense fallback={<ProjectsExplorer />}>
+            <ProjectsFeed />
+          </Suspense>
         </div>
       </section>
     </>
