@@ -44,16 +44,16 @@ export default function AdminLoginPage() {
         <div className="flex flex-col items-center mb-8 text-center">
           <Link
             href="/"
-            className="mb-4 inline-flex items-center justify-center p-3 rounded-2xl bg-white border border-[#dfe5db] shadow-xs hover:shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"
+            className="mb-4 inline-flex items-center justify-center rounded-2xl bg-white p-2 shadow-xs hover:shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"
           >
             <Image
-              src="/images/brand/edunite2serve-logo.png"
+              src="/images/brand/edunite2serve-mark.png"
               alt="Edunite2Serve"
-              width={264}
-              height={91}
+              width={96}
+              height={96}
               priority
               quality={100}
-              className="h-12 w-auto object-contain"
+              className="h-24 w-24 object-contain"
             />
           </Link>
           <h1 className="font-sans text-2xl font-bold text-brand-forest m-0">

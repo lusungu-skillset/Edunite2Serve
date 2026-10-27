@@ -62,11 +62,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="px-5 py-5 border-b border-[#edf2ea]">
           <Link href="/admin" className="flex items-center gap-2.5">
             <Image
-              src="/images/brand/edunite2serve-logo.png"
+              src="/images/brand/edunite2serve-mark.png"
               alt="Edunite2Serve"
-              width={36}
-              height={36}
-              className="h-9 w-auto object-contain"
+              width={48}
+              height={48}
+              className="h-11 w-11 object-contain"
             />
             <div>
               <p className="m-0 font-sans text-sm font-bold text-brand-forest leading-none">
@@ -185,11 +185,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Menu className="h-5 w-5" />
           </button>
           <Image
-            src="/images/brand/edunite2serve-logo.png"
+            src="/images/brand/edunite2serve-mark.png"
             alt="Edunite2Serve"
-            width={28}
-            height={28}
-            className="h-7 w-auto object-contain"
+            width={36}
+            height={36}
+            className="h-8 w-8 object-contain"
           />
           <span className="font-sans text-sm font-bold text-brand-forest">
             Admin Panel

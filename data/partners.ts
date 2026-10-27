@@ -9,20 +9,28 @@ export type Partner = {
 
 export const partners: readonly Partner[] = [
   {
-    name: "Malawi Adventist University",
-    shortName: "MAU",
-    role: "Higher Education",
-    src: "/images/partners/malawi-adventist-university.png",
-    width: 294,
-    height: 210,
-  },
-  {
     name: "Give-HOPE",
     shortName: "Give-HOPE",
     role: "Child Welfare & Nutrition",
     src: "/images/partners/give-hope.png",
     width: 455,
     height: 548,
+  },
+  {
+    name: "Agents of Change",
+    shortName: "Agents of Change",
+    role: "Community Development",
+    src: "/images/partners/agents-of-change-logo.png",
+    width: 1600,
+    height: 1600,
+  },
+  {
+    name: "FARM STEW International",
+    shortName: "FARM STEW",
+    role: "Agriculture & Nutrition",
+    src: "/images/partners/farmstew-logo.png",
+    width: 500,
+    height: 96,
   },
   {
     name: "Government of Malawi",

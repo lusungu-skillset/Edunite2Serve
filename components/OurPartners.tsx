@@ -61,20 +61,16 @@ export default function OurPartners() {
 
         {/* Partners Grid */}
         <motion.div
-          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5"
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
           initial="hidden"
           variants={containerVariants}
           viewport={{ once: true, margin: "-50px" }}
           whileInView="visible"
         >
-          {partners.map((partner, index) => (
+          {partners.map((partner) => (
             <motion.div
               key={partner.name}
-              className={`flex w-full ${
-                index === partners.length - 1
-                  ? "sm:col-span-2 sm:max-w-md sm:mx-auto lg:col-span-1 lg:max-w-none lg:mx-0"
-                  : ""
-              }`}
+              className="flex w-full"
               variants={itemVariants}
               whileHover={{ y: -5, transition: { duration: 0.22, ease: "easeOut" } }}
             >

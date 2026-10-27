@@ -9,8 +9,15 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-[1720px] px-10 max-[720px]:max-w-[596px] max-[720px]:px-[18px] max-[440px]:max-w-[570px] max-[440px]:px-[15px]">
         <div className="grid grid-cols-[minmax(220px,1.35fr)_repeat(2,minmax(130px,.75fr))_minmax(180px,1fr)] gap-[35px] pb-[49px] max-[1040px]:grid-cols-[1.2fr_1fr_1fr] max-[1040px]:gap-[30px] max-[760px]:grid-cols-2 max-[760px]:gap-[34px_21px] max-[480px]:grid-cols-1 max-[480px]:gap-7">
           <div className="max-[760px]:col-[1/-1]">
-            <Link className="inline-flex w-[210px] max-w-full rounded-md bg-white px-[11px] py-[9px] focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-lime" href="/" aria-label="Edunite2Serve home">
-              <Image className="block h-auto w-full" src="/images/brand/edunite2serve-logo.png" alt="Edunite2Serve — Enterprise for Wholeness" width={528} height={183} />
+            <Link className="inline-flex items-center gap-3 rounded-md focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-lime" href="/" aria-label="Edunite2Serve home">
+              <Image
+                className="block h-14 w-14 rounded-full bg-white p-1 object-contain"
+                src="/images/brand/edunite2serve-mark.png"
+                alt=""
+                aria-hidden="true"
+                width={177}
+                height={174}
+              />
             </Link>
             <p className="my-[17px] max-w-[310px] text-sm text-[#d2e2d6]">In togetherness, we believe there is power to do amazing things together.</p>
             <Link className="inline-flex gap-3 font-bold text-brand-lime transition-colors hover:text-white focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-brand-lime" href="/news">

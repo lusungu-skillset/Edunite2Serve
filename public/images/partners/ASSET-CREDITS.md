@@ -6,3 +6,5 @@
   - https://edunite2serve.org/wp-content/uploads/2025/06/Coat_of_arms_of_Malawi.svg.png
   - https://edunite2serve.org/wp-content/uploads/2025/06/NGORA-LOGO-FINAL-removebg-preview.png
   - https://edunite2serve.org/wp-content/uploads/2025/06/SDA_logo-removebg-preview.ico
+- Agents of Change logo: official website footer asset from [agentsofchangeaoc.org](https://agentsofchangeaoc.org/).
+- FARM STEW logo: official site header asset from [farmstew.org](https://www.farmstew.org/).
