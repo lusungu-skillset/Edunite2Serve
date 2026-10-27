@@ -7,16 +7,12 @@ import {
   ArrowRight,
   Calendar,
   Clock,
-  Heart,
-  Share2,
-  Sparkles,
   Tag,
   User,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
-import { getCmsArticleBySlug, getCmsArticles } from "@/lib/cms";
-import { articles as defaultArticles, type Article } from "@/data/articles";
-import { Card, CardContent } from "@/components/ui/card";
+import { getCmsArticleBySlug, getCmsNewsArchive } from "@/lib/cms";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { donationUrl } from "@/data/navigation";
@@ -26,10 +22,9 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  const articles = await getCmsArticles();
-  const list = articles.length > 0 ? articles : defaultArticles;
-  return list.map((art) => ({
-    slug: art.slug,
+  const archive = await getCmsNewsArchive();
+  return archive.map((article) => ({
+    slug: article.slug,
   }));
 }
 
@@ -62,8 +57,8 @@ export default async function NewsDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const allArticles = await getCmsArticles();
-  const relatedArticles = (allArticles.length > 0 ? allArticles : defaultArticles)
+  const allArticles = await getCmsNewsArchive();
+  const relatedArticles = allArticles
     .filter((a) => a.slug !== article.slug)
     .slice(0, 3);
 

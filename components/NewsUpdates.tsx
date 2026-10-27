@@ -10,10 +10,8 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
-  Clock,
   Pause,
   Play,
-  Quote,
   Sparkles,
 } from "lucide-react";
 import type { NewsSectionContent } from "@/data/news";
@@ -37,10 +35,12 @@ export default function NewsUpdates({
   const total = items.length;
 
   const handleNext = useCallback(() => {
+    if (total === 0) return;
     setCurrentIndex((prev) => (prev + 1) % total);
   }, [total]);
 
   const handlePrev = useCallback(() => {
+    if (total === 0) return;
     setCurrentIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
@@ -68,7 +68,7 @@ export default function NewsUpdates({
 
   // Auto-advance news posts every 3 seconds (smooth, brisk transition)
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || total === 0) return;
 
     const prefersReducedMotion =
       typeof window !== "undefined" &&
@@ -81,7 +81,7 @@ export default function NewsUpdates({
     }, 3000);
 
     return () => clearInterval(timer);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, total]);
 
   return (
     <section
@@ -113,14 +113,16 @@ export default function NewsUpdates({
 
           {/* Action CTAs & Controls */}
           <div className="flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={() => setIsPaused(!isPaused)}
-              aria-label={isPaused ? "Resume auto-rotation" : "Pause auto-rotation"}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#cbd9c8] bg-white text-brand-forest hover:bg-[#eef5eb] transition-colors"
-            >
-              {isPaused ? <Play className="h-4 w-4 fill-current ml-0.5" /> : <Pause className="h-4 w-4" />}
-            </button>
+            {total > 0 && (
+              <button
+                type="button"
+                onClick={() => setIsPaused(!isPaused)}
+                aria-label={isPaused ? "Resume auto-rotation" : "Pause auto-rotation"}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#cbd9c8] bg-white text-brand-forest hover:bg-[#eef5eb] transition-colors"
+              >
+                {isPaused ? <Play className="h-4 w-4 fill-current ml-0.5" /> : <Pause className="h-4 w-4" />}
+              </button>
+            )}
 
             <Button
               className="rounded-full bg-brand-forest hover:bg-brand-green text-white font-bold text-sm px-6 py-2.5 h-11 shadow-sm"
@@ -133,6 +135,12 @@ export default function NewsUpdates({
         </div>
 
         {/* 180° Circular Orbit Carousel Container */}
+        {total === 0 ? (
+          <p className="m-0 rounded-2xl border border-[#dfe5db] bg-white px-6 py-8 text-center text-brand-muted">
+            No news stories were posted in the last 30 days. Browse the archive to read older stories.
+          </p>
+        ) : (
+          <>
         <div
           className="relative mx-auto mt-6 w-full max-w-[1400px] select-none"
           onMouseEnter={() => setIsPaused(true)}
@@ -311,6 +319,8 @@ export default function NewsUpdates({
             </Button>
           </div>
         </div>
+          </>
+        )}
       </div>
     </section>
   );

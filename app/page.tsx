@@ -10,6 +10,8 @@ import SupportCta from "@/components/SupportCta";
 import { homepageContent } from "@/data/homepage";
 import { getNewsSectionContent } from "@/lib/news";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const newsContent = await getNewsSectionContent();
 

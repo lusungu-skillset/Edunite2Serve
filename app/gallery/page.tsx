@@ -6,6 +6,8 @@ import GalleryView from "@/components/GalleryView";
 import { getCmsGallery } from "@/lib/cms";
 import { donationUrl } from "@/data/navigation";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Photo Gallery | Edunite2Serve",
   description:

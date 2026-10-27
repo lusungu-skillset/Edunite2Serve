@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import SectionHeading from "@/components/SectionHeading";
 import ArticlesExplorer from "@/components/ArticlesExplorer";
-import { getCmsArticles } from "@/lib/cms";
+import { getCmsNewsArchive } from "@/lib/cms";
 import { donationUrl } from "@/data/navigation";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Blogs & Latest News | Edunite2Serve",
@@ -13,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 async function ArticlesFeed() {
-  const articlesList = await getCmsArticles();
+  const articlesList = await getCmsNewsArchive();
   return <ArticlesExplorer articles={articlesList} />;
 }
 

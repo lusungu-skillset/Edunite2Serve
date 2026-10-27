@@ -32,6 +32,8 @@ export default function AdminProjectsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentProject, setCurrentProject] = useState<Partial<Project>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [editingProjectSlug, setEditingProjectSlug] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState("");
 
   useEffect(() => {
     loadProjects();
@@ -43,6 +45,8 @@ export default function AdminProjectsPage() {
   }
 
   function handleOpenCreate() {
+    setEditingProjectSlug(null);
+    setSaveError("");
     setCurrentProject({
       slug: "",
       title: "",
@@ -58,6 +62,8 @@ export default function AdminProjectsPage() {
   }
 
   function handleOpenEdit(project: Project) {
+    setEditingProjectSlug(project.slug);
+    setSaveError("");
     setCurrentProject({ ...project });
     setIsEditing(true);
   }
@@ -86,10 +92,24 @@ export default function AdminProjectsPage() {
       impactMetrics: currentProject.impactMetrics || "",
     };
 
-    await saveCmsProject(payload);
-    await loadProjects();
-    setIsSaving(false);
-    setIsEditing(false);
+    setSaveError("");
+    try {
+      const result = await saveCmsProject(
+        payload,
+        editingProjectSlug ? "update" : "create",
+        editingProjectSlug || undefined
+      );
+      if (!result.success) {
+        setSaveError(result.error || "Unable to save this project.");
+        return;
+      }
+      await loadProjects();
+      setIsEditing(false);
+    } catch {
+      setSaveError("Unable to save this project. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   async function handleDelete(slug: string) {
@@ -324,6 +344,12 @@ export default function AdminProjectsPage() {
               folder="edunite2serve/projects"
               label="Project Feature Image (Cloudinary CDN)"
             />
+
+            {saveError && (
+              <p role="alert" className="m-0 text-sm font-medium text-red-700">
+                {saveError}
+              </p>
+            )}
 
             <DialogFooter className="border-t border-[#edf2ea] pt-4 flex flex-row items-center justify-end gap-3">
               <Button

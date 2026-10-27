@@ -32,6 +32,8 @@ export default function AdminNewsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentArticle, setCurrentArticle] = useState<Partial<Article>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [editingArticleSlug, setEditingArticleSlug] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState("");
 
   useEffect(() => {
     loadArticles();
@@ -43,6 +45,8 @@ export default function AdminNewsPage() {
   }
 
   function handleOpenCreate() {
+    setEditingArticleSlug(null);
+    setSaveError("");
     setCurrentArticle({
       id: Date.now(),
       slug: "",
@@ -63,6 +67,8 @@ export default function AdminNewsPage() {
   }
 
   function handleOpenEdit(article: Article) {
+    setEditingArticleSlug(article.slug);
+    setSaveError("");
     setCurrentArticle({ ...article });
     setIsEditing(true);
   }
@@ -87,10 +93,24 @@ export default function AdminNewsPage() {
         (currentArticle.content || "").slice(0, 160) + "...",
     };
 
-    await saveCmsArticle(payload);
-    await loadArticles();
-    setIsSaving(false);
-    setIsEditing(false);
+    setSaveError("");
+    try {
+      const result = await saveCmsArticle(
+        payload,
+        editingArticleSlug ? "update" : "create",
+        editingArticleSlug || undefined
+      );
+      if (!result.success) {
+        setSaveError(result.error || "Unable to publish this article.");
+        return;
+      }
+      await loadArticles();
+      setIsEditing(false);
+    } catch {
+      setSaveError("Unable to publish this article. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   async function handleDelete(slugOrId: string | number) {
@@ -328,6 +348,12 @@ export default function AdminNewsPage() {
               folder="edunite2serve/news"
               label="Story Featured Image (Cloudinary CDN)"
             />
+
+            {saveError && (
+              <p role="alert" className="m-0 text-sm font-medium text-red-700">
+                {saveError}
+              </p>
+            )}
 
             <DialogFooter className="border-t border-[#edf2ea] pt-4 flex flex-row items-center justify-end gap-3">
               <Button

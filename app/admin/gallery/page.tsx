@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { Images, MapPin, PlusCircle, Trash2 } from "lucide-react";
+import { MapPin, PlusCircle, Trash2 } from "lucide-react";
 import ImageUploader from "@/components/admin/ImageUploader";
+import { type GalleryItem } from "@/components/GalleryView";
+import { deleteCmsGalleryItem, getCmsGallery, saveCmsGalleryItem } from "@/lib/cms";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,52 +18,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const initialGallery = [
-  {
-    id: "g1",
-    title: "Learners at Mangunda Adventist Primary School",
-    category: "Child Education",
-    location: "Thyolo, Malawi",
-    image: "/images/featured-projects/mangunda-school.jpg",
-    caption: "Standards 1–7 students gathering outside their classroom block.",
-  },
-  {
-    id: "g2",
-    title: "Organic Crop Cultivation at Lakeside Farm",
-    category: "Sustainable Agriculture",
-    location: "Malawi Adventist University & Surrounds",
-    image: "/images/featured-projects/lakeside-farm.jpg",
-    caption: "Bio-intensive farming initiative growing sustainable staple crops.",
-  },
-  {
-    id: "g3",
-    title: "FARM STEW Community Recognition & Training",
-    category: "Healthcare & Nutrition",
-    location: "Zomba District, Malawi",
-    image: "/images/featured-projects/farmstew-international.jpg",
-    caption: "Graduates receiving certificates after completing comprehensive training.",
-  },
-  {
-    id: "g4",
-    title: "Give-HOPE Malawi Community Care Gathering",
-    category: "Community Care",
-    location: "Southern Region, Malawi",
-    image: "/images/featured-projects/give-hope-malawi.jpg",
-    caption: "Volunteer coordinators and learners celebrating sponsorships.",
-  },
-  {
-    id: "g5",
-    title: "Community Church Construction",
-    category: "Infrastructure",
-    location: "Rural Malawi",
-    image: "/images/featured-projects/church-construction.jpg",
-    caption: "Local builders raising durable brick sanctuaries.",
-  },
-];
-
 export default function AdminGalleryPage() {
-  const [items, setItems] = useState(initialGallery);
+  const [items, setItems] = useState<GalleryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [galleryError, setGalleryError] = useState("");
   const [newItem, setNewItem] = useState({
     title: "",
     category: "Child Education",
@@ -70,31 +32,97 @@ export default function AdminGalleryPage() {
     caption: "",
   });
 
-  function handleCreate(e: React.FormEvent) {
+  const loadGallery = useCallback(async (): Promise<boolean> => {
+    try {
+      const data = await getCmsGallery({ throwOnError: true });
+      setItems(data);
+      setGalleryError("");
+      return true;
+    } catch (error) {
+      setGalleryError(
+        error instanceof Error ? error.message : "Unable to load gallery photos."
+      );
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let isActive = true;
+
+    getCmsGallery({ throwOnError: true })
+      .then((data) => {
+        if (!isActive) return;
+        setItems(data);
+        setGalleryError("");
+      })
+      .catch((error: unknown) => {
+        if (!isActive) return;
+        setGalleryError(
+          error instanceof Error ? error.message : "Unable to load gallery photos."
+        );
+      })
+      .finally(() => {
+        if (isActive) setIsLoading(false);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     if (!newItem.title || !newItem.image) return;
 
-    setItems([
-      {
-        id: "g-" + Date.now(),
-        ...newItem,
-      },
-      ...items,
-    ]);
+    setIsSaving(true);
+    setGalleryError("");
+    try {
+      const result = await saveCmsGalleryItem({ ...newItem, order_index: 0 });
+      if (!result.success) {
+        setGalleryError(result.error || "Unable to save this photo.");
+        return;
+      }
 
-    setIsEditing(false);
-    setNewItem({
-      title: "",
-      category: "Child Education",
-      location: "Malawi",
-      image: "",
-      caption: "",
-    });
+      setIsEditing(false);
+      setNewItem({
+        title: "",
+        category: "Child Education",
+        location: "Malawi",
+        image: "",
+        caption: "",
+      });
+      setIsLoading(true);
+      const refreshed = await loadGallery();
+      if (!refreshed) {
+        setGalleryError("Photo saved, but the gallery list could not be refreshed.");
+      }
+    } catch (error) {
+      setGalleryError(
+        error instanceof Error ? error.message : "Unable to save this photo."
+      );
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function handleDelete(id: string) {
+  async function handleDelete(id: string) {
     if (confirm("Delete this photo?")) {
-      setItems(items.filter((i) => i.id !== id));
+      setGalleryError("");
+      try {
+        const result = await deleteCmsGalleryItem(id);
+        if (!result.success) {
+          setGalleryError(result.error || "Unable to delete this photo.");
+          return;
+        }
+        setIsLoading(true);
+        await loadGallery();
+      } catch (error) {
+        setGalleryError(
+          error instanceof Error ? error.message : "Unable to delete this photo."
+        );
+      }
     }
   }
 
@@ -119,9 +147,19 @@ export default function AdminGalleryPage() {
         </Button>
       </div>
 
+      {galleryError && (
+        <p role="alert" className="m-0 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700">
+          {galleryError}
+        </p>
+      )}
+
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((item) => (
+        {isLoading ? (
+          <p className="text-sm text-brand-muted">Loading gallery photos...</p>
+        ) : items.length === 0 ? (
+          <p className="text-sm text-brand-muted">No uploaded photos yet.</p>
+        ) : items.map((item) => (
           <Card
             key={item.id}
             className="group overflow-hidden rounded-2xl border border-[#dfe5db] bg-white p-0 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
@@ -258,10 +296,10 @@ export default function AdminGalleryPage() {
               </Button>
               <Button
                 type="submit"
-                disabled={!newItem.image || !newItem.title}
+                disabled={isSaving || !newItem.image || !newItem.title}
                 className="bg-brand-green hover:bg-brand-forest text-white font-bold"
               >
-                Save Photo
+                {isSaving ? "Saving Photo..." : "Save Photo"}
               </Button>
             </DialogFooter>
           </form>
