@@ -2,16 +2,18 @@ import Link from "next/link";
 import { homepageContent } from "@/data/homepage";
 import DonationImpactCarousel from "@/components/DonationImpactCarousel";
 import { Button } from "@/components/ui/button";
+import { getHomepageTestimonials } from "@/lib/cms-server";
 
 type DonationImpactSectionProps = {
   headingLevel?: "h1" | "h2";
 };
 
-export default function DonationImpactSection({
+export default async function DonationImpactSection({
   headingLevel = "h2",
 }: DonationImpactSectionProps) {
-  const { eyebrow, title, description, primaryCta, secondaryCta, items } =
+  const { eyebrow, title, description, primaryCta, secondaryCta } =
     homepageContent.donationImpact;
+  const items = await getHomepageTestimonials();
   const Heading = headingLevel;
   return (
     <section

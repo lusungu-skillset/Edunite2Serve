@@ -1,28 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { signInAdmin } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+const TURNSTILE_TEST_SITE_KEY = "1x00000000000000000000AA";
+const turnstileSiteKey =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
+  (process.env.NODE_ENV === "development" ? TURNSTILE_TEST_SITE_KEY : "");
+
+type TurnstileOptions = {
+  sitekey: string;
+  callback: (token: string) => void;
+  "expired-callback": () => void;
+  "error-callback": () => void;
+  theme?: "light" | "dark" | "auto";
+};
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: TurnstileOptions) => string;
+      reset: (widgetId?: string) => void;
+      remove: (widgetId?: string) => void;
+    };
+  }
+}
+
 export default function AdminLoginPage() {
   const router = useRouter();
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetIdRef = useRef<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [turnstileReady, setTurnstileReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const turnstile = window.turnstile;
+    const container = turnstileContainerRef.current;
+    if (!turnstileSiteKey || !turnstileReady || !turnstile || !container) return;
+
+    const widgetId = turnstile.render(container, {
+      sitekey: turnstileSiteKey,
+      theme: "light",
+      callback: (token) => {
+        setCaptchaToken(token);
+        setError(null);
+      },
+      "expired-callback": () => {
+        setCaptchaToken("");
+        setError("Cloudflare verification expired. Please verify again.");
+      },
+      "error-callback": () => {
+        setCaptchaToken("");
+        setError("Cloudflare verification failed to load. Please try again.");
+      },
+    });
+    turnstileWidgetIdRef.current = widgetId;
+
+    return () => {
+      turnstile.remove(widgetId);
+      turnstileWidgetIdRef.current = null;
+    };
+  }, [turnstileReady]);
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    if (turnstileSiteKey && !captchaToken) {
+      setError("Complete the Cloudflare verification before signing in.");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      const result = await signInAdmin(email, password);
+      const result = await signInAdmin(email, password, captchaToken || undefined);
       if (result.error) {
         setError(result.error);
         return;
@@ -32,6 +94,10 @@ export default function AdminLoginPage() {
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
     } finally {
+      if (turnstileWidgetIdRef.current) {
+        window.turnstile?.reset(turnstileWidgetIdRef.current);
+      }
+      setCaptchaToken("");
       setIsLoading(false);
     }
   }
@@ -107,6 +173,12 @@ export default function AdminLoginPage() {
               />
             </div>
 
+            {turnstileSiteKey && (
+              <div className="flex min-h-[66px] justify-center" aria-label="Cloudflare security verification">
+                <div ref={turnstileContainerRef} />
+              </div>
+            )}
+
             {error && (
               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700 leading-relaxed">
                 {error}
@@ -115,7 +187,7 @@ export default function AdminLoginPage() {
 
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || (Boolean(turnstileSiteKey) && !captchaToken)}
               className="w-full rounded-xl bg-brand-forest hover:bg-brand-green text-white font-semibold text-sm py-2.5 h-11 shadow-sm"
             >
               {isLoading ? (
@@ -129,6 +201,16 @@ export default function AdminLoginPage() {
             </Button>
           </form>
         </div>
+
+        {turnstileSiteKey && (
+          <Script
+            id="cloudflare-turnstile"
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+            strategy="afterInteractive"
+            onReady={() => setTurnstileReady(true)}
+            onError={() => setError("Cloudflare verification could not be loaded. Check your connection and reload the page.")}
+          />
+        )}
 
         {/* Back link */}
         <p className="text-center mt-6 text-xs text-brand-muted">

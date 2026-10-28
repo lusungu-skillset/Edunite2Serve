@@ -31,6 +31,8 @@ export default function AdminTestimonialsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<any>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveNotice, setSaveNotice] = useState<string | null>(null);
 
   useEffect(() => {
     loadTestimonials();
@@ -42,6 +44,8 @@ export default function AdminTestimonialsPage() {
   }
 
   function handleOpenCreate() {
+    setSaveError(null);
+    setSaveNotice(null);
     setCurrentItem({
       title: "",
       author: "",
@@ -54,6 +58,8 @@ export default function AdminTestimonialsPage() {
   }
 
   function handleOpenEdit(item: any) {
+    setSaveError(null);
+    setSaveNotice(null);
     setCurrentItem({ ...item });
     setIsEditing(true);
   }
@@ -63,10 +69,33 @@ export default function AdminTestimonialsPage() {
     if (!currentItem.title || !currentItem.author || !currentItem.quote) return;
 
     setIsSaving(true);
-    await saveCmsTestimonial(currentItem);
-    await loadTestimonials();
-    setIsSaving(false);
-    setIsEditing(false);
+    setSaveError(null);
+    setSaveNotice(null);
+
+    try {
+      const result = await saveCmsTestimonial(currentItem);
+      if (!result.success) {
+        setSaveError(result.error || "The testimonial could not be saved.");
+        return;
+      }
+
+      await loadTestimonials();
+      if (result.isMock) {
+        setSaveNotice(
+          "Saved in demo mode for this session only. Connect Supabase to publish it on the homepage."
+        );
+        setIsEditing(false);
+        return;
+      }
+
+      setIsEditing(false);
+    } catch (error) {
+      setSaveError(
+        error instanceof Error ? error.message : "The testimonial could not be saved."
+      );
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -90,6 +119,15 @@ export default function AdminTestimonialsPage() {
           Add Testimonial
         </Button>
       </div>
+
+      {saveNotice && (
+        <p
+          className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+          role="status"
+        >
+          {saveNotice}
+        </p>
+      )}
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,6 +206,14 @@ export default function AdminTestimonialsPage() {
           </DialogHeader>
 
           <form onSubmit={handleSave} className="space-y-4 pt-2">
+            {saveError && (
+              <p
+                className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+                role="alert"
+              >
+                {saveError}
+              </p>
+            )}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-brand-forest mb-1">
                 Story Title / Pillar *

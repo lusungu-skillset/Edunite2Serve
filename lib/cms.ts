@@ -375,11 +375,14 @@ export async function getCmsTestimonials() {
   return localStore.testimonials;
 }
 
-export async function saveCmsTestimonial(t: any): Promise<{ success: boolean; error?: string }> {
+export async function saveCmsTestimonial(
+  t: any
+): Promise<{ success: boolean; error?: string; isMock?: boolean }> {
   if (isSupabaseConfigured()) {
     const supabase = createClient();
     if (supabase) {
       const { error } = await supabase.from("testimonials").upsert({
+        ...(t.id ? { id: t.id } : {}),
         title: t.title,
         author: t.author,
         quote: t.quote,
@@ -394,7 +397,7 @@ export async function saveCmsTestimonial(t: any): Promise<{ success: boolean; er
   }
 
   localStore.testimonials.unshift(t);
-  return { success: true };
+  return { success: true, isMock: true };
 }
 
 /* =========================================================================

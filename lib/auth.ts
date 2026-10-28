@@ -22,7 +22,8 @@ export function isSupabaseConfigured(): boolean {
  */
 export async function signInAdmin(
   email: string,
-  pass: string
+  pass: string,
+  captchaToken?: string
 ): Promise<{ user: AdminUser | null; error: string | null; isMock?: boolean }> {
   // If Supabase is not configured yet, support Sandbox Demo Admin mode
   if (!isSupabaseConfigured()) {
@@ -50,6 +51,7 @@ export async function signInAdmin(
   const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
     email,
     password: pass,
+    ...(captchaToken ? { options: { captchaToken } } : {}),
   });
 
   if (authError || !authData.user) {
