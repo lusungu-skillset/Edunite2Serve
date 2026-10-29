@@ -139,9 +139,20 @@ CREATE TABLE IF NOT EXISTS public.team_members (
   role TEXT NOT NULL,
   bio TEXT NOT NULL,
   initials TEXT NOT NULL,
+  image TEXT,
+  department TEXT NOT NULL DEFAULT 'General',
+  is_published BOOLEAN NOT NULL DEFAULT true,
   order_index INT NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE public.team_members
+  ADD COLUMN IF NOT EXISTS image TEXT,
+  ADD COLUMN IF NOT EXISTS department TEXT NOT NULL DEFAULT 'General',
+  ADD COLUMN IF NOT EXISTS is_published BOOLEAN NOT NULL DEFAULT true;
+
+CREATE INDEX IF NOT EXISTS team_members_department_order_idx
+  ON public.team_members (department, order_index);
 
 -- OPPORTUNITIES
 CREATE TABLE IF NOT EXISTS public.opportunities (
@@ -220,8 +231,9 @@ CREATE POLICY "Admin full gallery access" ON public.gallery_items
   FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
 
 -- Team policies
+DROP POLICY IF EXISTS "Public read team members" ON public.team_members;
 CREATE POLICY "Public read team members" ON public.team_members
-  FOR SELECT USING (true);
+  FOR SELECT USING (is_published = true);
 
 CREATE POLICY "Admin full team access" ON public.team_members
   FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());

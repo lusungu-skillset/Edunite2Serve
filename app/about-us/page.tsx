@@ -92,7 +92,7 @@ export default function AboutUsPage() {
                     {story.founder}
                   </cite>
                   <p className="m-0 text-sm font-medium text-white/80">
-                    Founder & International Director
+                    Executive Lead
                   </p>
                 </div>
               </div>

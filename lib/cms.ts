@@ -3,13 +3,23 @@ import { isSupabaseConfigured } from "@/lib/auth";
 import { projectDirectory, type Project } from "@/data/projects";
 import { articles, type Article } from "@/data/articles";
 import { homepageContent } from "@/data/homepage";
-import { aboutContent } from "@/data/about";
+import { allTeamMembers, type TeamMember } from "@/data/team";
+
+type CmsTestimonial = {
+  id?: string;
+  title: string;
+  author: string;
+  quote: string;
+  accent?: string;
+  icon?: string;
+  rating?: number;
+};
 
 // In-memory / local storage cache for mock/dev fallback when Supabase keys are pending
 const localStore = {
   projects: [...projectDirectory] as Project[],
   articles: [...articles] as Article[],
-  testimonials: [...homepageContent.donationImpact.items],
+  testimonials: [...homepageContent.donationImpact.items] as CmsTestimonial[],
   gallery: [
     {
       id: "gal-1",
@@ -36,7 +46,7 @@ const localStore = {
       caption: "Graduates receiving certificates after completing comprehensive training.",
     },
   ],
-  team: [...aboutContent.leadership],
+  team: [...allTeamMembers],
   inquiries: [
     {
       id: "inq-1",
@@ -368,8 +378,8 @@ export async function getCmsTestimonials() {
   if (isSupabaseConfigured()) {
     const supabase = createClient();
     if (supabase) {
-      const { data, error } = await supabase.from("testimonials").select("*").eq("is_published", true);
-      if (!error && data && data.length > 0) return data;
+      const { data, error } = await supabase.from("testimonials").select("*");
+      if (!error && data) return data;
     }
   }
   return localStore.testimonials;
@@ -398,6 +408,30 @@ export async function saveCmsTestimonial(
 
   localStore.testimonials.unshift(t);
   return { success: true, isMock: true };
+}
+
+export async function deleteCmsTestimonial(
+  testimonial: CmsTestimonial
+): Promise<{ success: boolean; error?: string }> {
+  if (isSupabaseConfigured()) {
+    const supabase = createClient();
+    if (supabase) {
+      if (!testimonial.id) {
+        return { success: false, error: "This testimonial could not be identified in the database." };
+      }
+
+      const { error } = await supabase.from("testimonials").delete().eq("id", testimonial.id);
+      if (error) return { success: false, error: error.message };
+      return { success: true };
+    }
+  }
+
+  localStore.testimonials = localStore.testimonials.filter((item) =>
+    testimonial.id
+      ? item.id !== testimonial.id
+      : item.title !== testimonial.title || item.author !== testimonial.author
+  );
+  return { success: true };
 }
 
 /* =========================================================================
@@ -542,49 +576,87 @@ export async function deleteCmsGalleryItem(id: string): Promise<{ success: boole
    TEAM
 ========================================================================= */
 
-export async function getCmsTeam() {
+export type CmsTeamMember = TeamMember & {
+  id?: string;
+  created_at?: string;
+};
+
+export async function getCmsTeam(): Promise<CmsTeamMember[]> {
   if (isSupabaseConfigured()) {
     const supabase = createClient();
     if (supabase) {
-      const { data, error } = await supabase.from("team_members").select("*").order("order_index", { ascending: true });
-      if (!error && data && data.length > 0) return data;
+      const { data, error } = await supabase
+        .from("team_members")
+        .select("*")
+        .order("order_index", { ascending: true });
+      if (!error && data) return data as CmsTeamMember[];
+      if (error) console.error("Unable to load team members:", error.message);
     }
   }
-  return localStore.team;
+  return localStore.team as CmsTeamMember[];
 }
 
-export async function saveCmsTeamMember(member: any): Promise<{ success: boolean; error?: string }> {
+export async function saveCmsTeamMember(
+  member: CmsTeamMember,
+  existingMember?: Pick<CmsTeamMember, "id" | "name">
+): Promise<{ success: boolean; error?: string }> {
+  const payload = {
+    name: member.name,
+    role: member.role,
+    bio: member.bio,
+    initials: member.initials,
+    image: member.image || "",
+    department: member.department || "General",
+    order_index: member.order_index ?? 0,
+    is_published: member.is_published ?? true,
+  };
+
   if (isSupabaseConfigured()) {
     const supabase = createClient();
     if (supabase) {
-      const { error } = await supabase.from("team_members").upsert({
-        name: member.name,
-        role: member.role,
-        bio: member.bio,
-        initials: member.initials,
-        image: member.image,
-        order_index: member.order_index || 0,
-      });
+      const query = existingMember?.id
+        ? supabase.from("team_members").update(payload).eq("id", existingMember.id)
+        : existingMember?.name
+          ? supabase.from("team_members").update(payload).eq("name", existingMember.name)
+          : supabase.from("team_members").insert(payload);
+      const { error } = await query;
       if (error) return { success: false, error: error.message };
       return { success: true };
     }
   }
-  localStore.team.unshift({
-    ...member,
-  });
+  const existingIndex = localStore.team.findIndex((candidate) =>
+    existingMember?.id
+      ? (candidate as CmsTeamMember).id === existingMember.id
+      : existingMember?.name === candidate.name
+  );
+  const savedMember: CmsTeamMember = {
+    ...payload,
+    id: existingIndex >= 0
+      ? (localStore.team[existingIndex] as CmsTeamMember).id
+      : member.id || `team-${Date.now()}`,
+  };
+  if (existingIndex >= 0) localStore.team[existingIndex] = savedMember;
+  else localStore.team.push(savedMember);
   return { success: true };
 }
 
-export async function deleteCmsTeamMember(name: string): Promise<{ success: boolean; error?: string }> {
+export async function deleteCmsTeamMember(
+  member: Pick<CmsTeamMember, "id" | "name">
+): Promise<{ success: boolean; error?: string }> {
   if (isSupabaseConfigured()) {
     const supabase = createClient();
     if (supabase) {
-      const { error } = await supabase.from("team_members").delete().eq("name", name);
+      const query = member.id
+        ? supabase.from("team_members").delete().eq("id", member.id)
+        : supabase.from("team_members").delete().eq("name", member.name);
+      const { error } = await query;
       if (error) return { success: false, error: error.message };
       return { success: true };
     }
   }
-  localStore.team = localStore.team.filter((t) => t.name !== name);
+  localStore.team = localStore.team.filter((t) =>
+    member.id ? (t as CmsTeamMember).id !== member.id : t.name !== member.name
+  );
   return { success: true };
 }
 

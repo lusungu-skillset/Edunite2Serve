@@ -68,7 +68,7 @@ export default function OtherPagesPage() {
                 </h3>
                 <CardContent className="p-0 mt-3">
                   <p className="m-0 text-sm leading-[1.7] text-brand-muted">
-                    Profiles of our founder Prof. Sharon Pittman, CEO Grey Sagawa, CFO Juliet Dzikolo, and field project coordinators in Malawi.
+                    Meet the executive, operations, finance, communications, education, and program teams serving communities across Malawi.
                   </p>
                 </CardContent>
               </div>

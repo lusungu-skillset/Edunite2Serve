@@ -13,7 +13,7 @@ import {
   Trash2,
   UtensilsCrossed,
 } from "lucide-react";
-import { getCmsTestimonials, saveCmsTestimonial } from "@/lib/cms";
+import { deleteCmsTestimonial, getCmsTestimonials, saveCmsTestimonial } from "@/lib/cms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,8 @@ export default function AdminTestimonialsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deletingItemKey, setDeletingItemKey] = useState<string | null>(null);
 
   useEffect(() => {
     loadTestimonials();
@@ -98,6 +100,29 @@ export default function AdminTestimonialsPage() {
     }
   }
 
+  async function handleDelete(item: any) {
+    if (!confirm(`Delete the testimonial “${item.title}” by ${item.author}?`)) return;
+
+    const itemKey = item.id || `${item.title}:${item.author}`;
+    setDeletingItemKey(itemKey);
+    setDeleteError(null);
+
+    try {
+      const result = await deleteCmsTestimonial(item);
+      if (!result.success) {
+        setDeleteError(result.error || "The testimonial could not be deleted.");
+        return;
+      }
+      await loadTestimonials();
+    } catch (error) {
+      setDeleteError(
+        error instanceof Error ? error.message : "The testimonial could not be deleted."
+      );
+    } finally {
+      setDeletingItemKey(null);
+    }
+  }
+
   return (
     <div className="space-y-6 max-w-[1400px] mx-auto">
       {/* Header */}
@@ -126,6 +151,12 @@ export default function AdminTestimonialsPage() {
           role="status"
         >
           {saveNotice}
+        </p>
+      )}
+
+      {deleteError && (
+        <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+          {deleteError}
         </p>
       )}
 
@@ -183,14 +214,28 @@ export default function AdminTestimonialsPage() {
                 </span>
               </div>
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleOpenEdit(item)}
-                className="h-7 px-2.5 text-xs font-bold"
-              >
-                <Edit className="h-3 w-3 mr-1" /> Edit
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleOpenEdit(item)}
+                  className="h-7 px-2.5 text-xs font-bold"
+                >
+                  <Edit className="h-3 w-3 mr-1" /> Edit
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => handleDelete(item)}
+                  disabled={deletingItemKey === (item.id || `${item.title}:${item.author}`)}
+                  aria-label={`Delete testimonial by ${item.author}`}
+                  title="Delete testimonial"
+                  className="h-7 w-7 text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
           </Card>
         ))}
