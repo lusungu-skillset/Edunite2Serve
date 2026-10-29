@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { UsersRound } from "lucide-react";
-import type { TeamMember } from "@/data/team";
+import type { TeamMember } from "@/lib/team";
 
 export default function TeamDirectory({ members }: { members: TeamMember[] }) {
   const [activeDepartment, setActiveDepartment] = useState("All");

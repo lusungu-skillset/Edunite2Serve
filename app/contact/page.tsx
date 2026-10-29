@@ -55,10 +55,10 @@ export default function ContactPage() {
                       Malawi Field Office
                     </Badge>
                     <h3 className="m-0 font-sans text-lg font-bold text-brand-forest">
-                      Dedza, Malawi
+                      Zomba, Malawi
                     </h3>
                     <p className="m-0 mt-1.5 text-sm text-brand-muted leading-relaxed">
-                      Edunite2serve, P.O. Box 30705, Dedza, Malawi.
+                      Edunite2serve, P.O. Box 30705, Zomba, Malawi.
                     </p>
                   </div>
                 </div>

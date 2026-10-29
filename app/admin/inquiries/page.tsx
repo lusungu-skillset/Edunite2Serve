@@ -1,44 +1,65 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Archive,
   CheckCircle2,
   Mail,
-  MailQuestion,
   Phone,
   Reply,
-  Search,
 } from "lucide-react";
 import { getCmsInquiries, updateInquiryStatus } from "@/lib/cms";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
+type AdminInquiry = {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject?: string | null;
+  message: string;
+  status: "unread" | "replied" | "archived";
+};
 
 export default function AdminInquiriesPage() {
-  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [inquiries, setInquiries] = useState<AdminInquiry[]>([]);
   const [filter, setFilter] = useState("all");
-  const [selectedInquiry, setSelectedInquiry] = useState<any | null>(null);
+  const [selectedInquiry, setSelectedInquiry] = useState<AdminInquiry | null>(null);
+  const [inquiryError, setInquiryError] = useState("");
 
-  useEffect(() => {
-    loadInquiries();
+  const loadInquiries = useCallback(async () => {
+    return (await getCmsInquiries()) as AdminInquiry[];
   }, []);
 
-  async function loadInquiries() {
-    const data = await getCmsInquiries();
-    setInquiries(data);
-    if (data.length > 0 && !selectedInquiry) {
-      setSelectedInquiry(data[0]);
-    }
-  }
+  useEffect(() => {
+    let isCurrent = true;
+    void loadInquiries().then((data) => {
+      if (!isCurrent) return;
+      setInquiries(data);
+      setSelectedInquiry((current) =>
+        (current && data.find((inquiry) => inquiry.id === current.id)) || data[0] || null
+      );
+    });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [loadInquiries]);
 
   async function handleSetStatus(id: string, status: "unread" | "replied" | "archived") {
-    await updateInquiryStatus(id, status);
-    await loadInquiries();
-    if (selectedInquiry?.id === id) {
-      setSelectedInquiry({ ...selectedInquiry, status });
+    const result = await updateInquiryStatus(id, status);
+    if (!result.success) {
+      setInquiryError(result.error || "Unable to update this inquiry.");
+      return;
     }
+    setInquiryError("");
+    const data = await loadInquiries();
+    setInquiries(data);
+    setSelectedInquiry((current) =>
+      (current && data.find((inquiry) => inquiry.id === current.id)) || data[0] || null
+    );
   }
 
   const filtered = inquiries.filter((i) => {
@@ -77,6 +98,12 @@ export default function AdminInquiriesPage() {
           ))}
         </div>
       </div>
+
+      {inquiryError && (
+        <p role="alert" className="m-0 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {inquiryError}
+        </p>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left List */}

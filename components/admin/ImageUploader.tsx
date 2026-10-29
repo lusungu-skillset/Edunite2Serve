@@ -12,6 +12,8 @@ type ImageUploaderProps = {
   label?: string;
 };
 
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+
 export default function ImageUploader({
   value,
   onChange,
@@ -25,6 +27,15 @@ export default function ImageUploader({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uploadFile = useCallback(async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setError("Choose an image file (PNG, JPG, or WebP).");
+      return;
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      setError("Images must be 10 MB or smaller.");
+      return;
+    }
+
     setIsUploading(true);
     setError(null);
     setSuccess(false);
@@ -48,8 +59,8 @@ export default function ImageUploader({
       onChange(data.url);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-    } catch (err: any) {
-      setError(err.message || "Upload failed. Check Cloudinary credentials.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed. Check Cloudinary credentials.");
     } finally {
       setIsUploading(false);
     }
@@ -57,7 +68,7 @@ export default function ImageUploader({
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) uploadFile(file);
+    if (file) void uploadFile(file);
     // Reset so same file can be re-selected
     e.target.value = "";
   }
@@ -66,7 +77,7 @@ export default function ImageUploader({
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith("image/")) uploadFile(file);
+    if (file) void uploadFile(file);
   }
 
   function handleDragOver(e: React.DragEvent) {
@@ -81,9 +92,9 @@ export default function ImageUploader({
   return (
     <div className="space-y-2">
       {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wider text-brand-forest">
+        <p className="m-0 block text-xs font-semibold uppercase tracking-wider text-brand-forest">
           {label}
-        </label>
+        </p>
       )}
 
       {value ? (
@@ -160,6 +171,7 @@ export default function ImageUploader({
         type="file"
         accept="image/*"
         onChange={handleFileSelect}
+        aria-label={`Upload ${label.toLowerCase()}`}
         className="hidden"
       />
 

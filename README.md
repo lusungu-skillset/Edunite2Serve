@@ -25,6 +25,10 @@ Admin panel: [http://localhost:3000/admin](http://localhost:3000/admin)
 
 See .env.example for required variables (Supabase + Cloudinary).
 
+## Team Directory Setup
+
+Apply `supabase/migrations/20261029_team_directory.sql` to the Supabase project to add the staff directory fields and access policies. It does not create staff records; create staff through the admin team page. Profile photo uploads require an administrator session, the team migration, and the Cloudinary variables listed below.
+
 ### Admin login CAPTCHA (Cloudflare Turnstile)
 
 The admin login uses Cloudflare Turnstile and passes its token to Supabase Auth. In local development, the Cloudflare test site key is used automatically. To test Supabase CAPTCHA verification locally, enable CAPTCHA protection in the Supabase Auth settings, choose Cloudflare Turnstile, and use Cloudflare's matching test secret key (`1x0000000000000000000000000000000AA`).

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import TeamDirectory from "@/components/TeamDirectory";
-import { allTeamMembers, type TeamMember } from "@/data/team";
+import type { TeamMember } from "@/lib/team";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 
@@ -13,10 +13,33 @@ export const metadata: Metadata = {
     "Meet Edunite2Serve's staff leaders, program leads, and team members across Malawi.",
 };
 
+function describeTeamLoadError(error: unknown) {
+  if (error instanceof Error) {
+    return { name: error.name, message: error.message };
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const details = error as {
+      code?: unknown;
+      message?: unknown;
+      details?: unknown;
+      hint?: unknown;
+    };
+    return {
+      code: details.code,
+      message: details.message || "Unknown database error",
+      details: details.details,
+      hint: details.hint,
+    };
+  }
+
+  return { message: String(error) };
+}
+
 async function getPublicTeamMembers(): Promise<TeamMember[]> {
   try {
     const supabase = await createClient();
-    if (!supabase) return allTeamMembers;
+    if (!supabase) return [];
 
     const { data, error } = await supabase
       .from("team_members")
@@ -24,38 +47,30 @@ async function getPublicTeamMembers(): Promise<TeamMember[]> {
       .eq("is_published", true)
       .order("order_index", { ascending: true });
 
-    if (error) {
-      // Older deployments do not have the directory columns yet. Read the
-      // original table shape and enrich its rows with the local roster data.
+    if (error?.code === "42703") {
+      // Older databases have only the original columns. Keep existing real
+      // rows visible until the team-directory migration has been applied.
       const { data: legacyData, error: legacyError } = await supabase
         .from("team_members")
         .select("id, name, role, bio, initials, order_index")
         .order("order_index", { ascending: true });
 
-      if (legacyError || !legacyData) return allTeamMembers;
+      if (legacyError) throw legacyError;
 
-      const rosterByName = new Map(allTeamMembers.map((member) => [member.name, member]));
-      const hasCurrentRoster = allTeamMembers.every((member) =>
-        legacyData.some((row) => row.name === member.name)
-      );
-
-      if (!hasCurrentRoster) return allTeamMembers;
-
-      return legacyData.map((row) => {
-        const rosterMember = rosterByName.get(row.name);
-        return {
-          ...rosterMember,
-          ...row,
-          image: rosterMember?.image,
-          department: rosterMember?.department || "General",
-          is_published: true,
-        } as TeamMember;
-      });
+      return (legacyData || []).map((member) => ({
+        ...member,
+        image: undefined,
+        department: "General",
+        is_published: true,
+      })) as TeamMember[];
     }
 
+    if (error) throw error;
+
     return (data || []) as TeamMember[];
-  } catch {
-    return allTeamMembers;
+  } catch (error) {
+    console.error("Unable to load public team members:", describeTeamLoadError(error));
+    return [];
   }
 }
 

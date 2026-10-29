@@ -1,9 +1,8 @@
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/auth";
-import { projectDirectory, type Project } from "@/data/projects";
+import type { Project } from "@/data/projects";
 import { articles, type Article } from "@/data/articles";
-import { homepageContent } from "@/data/homepage";
-import { allTeamMembers, type TeamMember } from "@/data/team";
+import type { TeamMember } from "@/lib/team";
 
 type CmsTestimonial = {
   id?: string;
@@ -13,62 +12,6 @@ type CmsTestimonial = {
   accent?: string;
   icon?: string;
   rating?: number;
-};
-
-// In-memory / local storage cache for mock/dev fallback when Supabase keys are pending
-const localStore = {
-  projects: [...projectDirectory] as Project[],
-  articles: [...articles] as Article[],
-  testimonials: [...homepageContent.donationImpact.items] as CmsTestimonial[],
-  gallery: [
-    {
-      id: "gal-1",
-      title: "Learners at Mangunda Primary School",
-      category: "Child Education",
-      location: "Thyolo, Malawi",
-      image: "/images/featured-projects/mangunda-school.jpg",
-      caption: "Standards 1–7 students gathering outside their classroom block.",
-    },
-    {
-      id: "gal-2",
-      title: "Organic Crop Cultivation at Lakeside Farm",
-      category: "Sustainable Agriculture",
-      location: "Malawi Adventist University & Surrounds",
-      image: "/images/featured-projects/lakeside-farm.jpg",
-      caption: "Bio-intensive farming initiative growing sustainable staple crops.",
-    },
-    {
-      id: "gal-3",
-      title: "FARM STEW Community Recognition",
-      category: "Healthcare & Nutrition",
-      location: "Zomba District, Malawi",
-      image: "/images/featured-projects/farmstew-international.jpg",
-      caption: "Graduates receiving certificates after completing comprehensive training.",
-    },
-  ],
-  team: [...allTeamMembers],
-  inquiries: [
-    {
-      id: "inq-1",
-      name: "Pastor David Banda",
-      email: "dbanda@example.org",
-      phone: "+265 991 234 567",
-      subject: "Church Construction in Dedza",
-      message: "We would like to request assistance with bricks and roofing for our rural congregation sanctuary in Dedza West.",
-      status: "unread",
-      date: "2025-02-14",
-    },
-    {
-      id: "inq-2",
-      name: "Sarah Jenkins",
-      email: "sjenkins@university.edu",
-      phone: "+1 404 555 0192",
-      subject: "University Volunteer Attachment",
-      message: "I am a graduate student in public health and would love to volunteer with the FARM STEW nutrition training program this summer.",
-      status: "replied",
-      date: "2025-02-10",
-    },
-  ],
 };
 
 type SaveMode = "create" | "update";
@@ -112,8 +55,11 @@ export async function getCmsProjects(): Promise<Project[]> {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (!error && data && data.length > 0) {
-        return data.map((p) => ({
+      if (error) {
+        console.error("Unable to load projects:", error.message);
+        return [];
+      }
+      return (data || []).map((p) => ({
           slug: p.slug,
           title: p.title,
           category: p.category,
@@ -124,10 +70,9 @@ export async function getCmsProjects(): Promise<Project[]> {
           imageAlt: p.image_alt || p.title,
           impactMetrics: p.impact_metrics || "",
         }));
-      }
     }
   }
-  return localStore.projects;
+  return [];
 }
 
 export async function getCmsProjectBySlug(slug: string): Promise<Project | null> {
@@ -186,23 +131,7 @@ export async function saveCmsProject(
     }
   }
 
-  // Fallback
-  if (mode === "update") {
-    if (!existingSlug) {
-      return { success: false, error: "The project to update could not be identified." };
-    }
-    const existingIndex = localStore.projects.findIndex((p) => p.slug === existingSlug);
-    if (existingIndex < 0) return { success: false, error: "The project could not be found." };
-    const conflictingProject = localStore.projects.some(
-      (p) => p.slug === project.slug && p.slug !== existingSlug
-    );
-    if (conflictingProject) return { success: false, error: "That project URL is already in use." };
-    localStore.projects[existingIndex] = project;
-  } else {
-    const slug = createUniqueSlug(project.slug || project.title, localStore.projects.map((p) => p.slug));
-    localStore.projects.unshift({ ...project, slug });
-  }
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 export async function deleteCmsProject(slug: string): Promise<{ success: boolean; error?: string }> {
@@ -215,8 +144,7 @@ export async function deleteCmsProject(slug: string): Promise<{ success: boolean
     }
   }
 
-  localStore.projects = localStore.projects.filter((p) => p.slug !== slug);
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 /* =========================================================================
@@ -232,8 +160,11 @@ export async function getCmsArticles(): Promise<Article[]> {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (!error && data && data.length > 0) {
-        return data.map((a) => ({
+      if (error) {
+        console.error("Unable to load articles:", error.message);
+        return [];
+      }
+      return (data || []).map((a) => ({
           id: a.id,
           slug: a.slug,
           title: a.title,
@@ -246,10 +177,9 @@ export async function getCmsArticles(): Promise<Article[]> {
           formattedDate: a.published_date,
           date: a.published_date,
         }));
-      }
     }
   }
-  return localStore.articles;
+  return [];
 }
 
 export async function getCmsNewsArchive(): Promise<Article[]> {
@@ -323,37 +253,7 @@ export async function saveCmsArticle(
     }
   }
 
-  const slug = article.slug || `article-${Date.now()}`;
-  const newArticle: Article = {
-    id: article.id || Date.now(),
-    slug,
-    title: article.title || "Untitled Article",
-    date: article.date || new Date().toISOString().split("T")[0],
-    formattedDate: article.formattedDate || "Recent",
-    author: article.author || "Edunite2Serve Malawi",
-    category: article.category || "Community Care",
-    readTime: article.readTime || "3 min read",
-    excerpt: article.excerpt || "",
-    content: article.content || "",
-    image: article.image || "/images/news/news-931.jpg",
-  };
-
-  if (mode === "update") {
-    if (!existingSlug) {
-      return { success: false, error: "The article to update could not be identified." };
-    }
-    const existingIndex = localStore.articles.findIndex((a) => a.slug === existingSlug);
-    if (existingIndex < 0) return { success: false, error: "The article could not be found." };
-    const conflictingArticle = localStore.articles.some(
-      (a) => a.slug === newArticle.slug && a.slug !== existingSlug
-    );
-    if (conflictingArticle) return { success: false, error: "That article URL is already in use." };
-    localStore.articles[existingIndex] = newArticle;
-  } else {
-    newArticle.slug = createUniqueSlug(newArticle.slug, localStore.articles.map((a) => a.slug));
-    localStore.articles.unshift(newArticle);
-  }
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 export async function deleteCmsArticle(slugOrId: string | number): Promise<{ success: boolean; error?: string }> {
@@ -366,8 +266,7 @@ export async function deleteCmsArticle(slugOrId: string | number): Promise<{ suc
     }
   }
 
-  localStore.articles = localStore.articles.filter((a) => a.slug !== String(slugOrId) && a.id !== slugOrId);
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 /* =========================================================================
@@ -379,15 +278,19 @@ export async function getCmsTestimonials() {
     const supabase = createClient();
     if (supabase) {
       const { data, error } = await supabase.from("testimonials").select("*");
-      if (!error && data) return data;
+      if (error) {
+        console.error("Unable to load testimonials:", error.message);
+        return [];
+      }
+      return data || [];
     }
   }
-  return localStore.testimonials;
+  return [];
 }
 
 export async function saveCmsTestimonial(
-  t: any
-): Promise<{ success: boolean; error?: string; isMock?: boolean }> {
+  t: CmsTestimonial
+): Promise<{ success: boolean; error?: string }> {
   if (isSupabaseConfigured()) {
     const supabase = createClient();
     if (supabase) {
@@ -406,8 +309,7 @@ export async function saveCmsTestimonial(
     }
   }
 
-  localStore.testimonials.unshift(t);
-  return { success: true, isMock: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 export async function deleteCmsTestimonial(
@@ -426,12 +328,7 @@ export async function deleteCmsTestimonial(
     }
   }
 
-  localStore.testimonials = localStore.testimonials.filter((item) =>
-    testimonial.id
-      ? item.id !== testimonial.id
-      : item.title !== testimonial.title || item.author !== testimonial.author
-  );
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 /* =========================================================================
@@ -443,10 +340,14 @@ export async function getCmsInquiries() {
     const supabase = createClient();
     if (supabase) {
       const { data, error } = await supabase.from("contact_inquiries").select("*").order("created_at", { ascending: false });
-      if (!error && data) return data;
+      if (error) {
+        console.error("Unable to load inquiries:", error.message);
+        return [];
+      }
+      return data || [];
     }
   }
-  return localStore.inquiries;
+  return [];
 }
 
 export async function submitCmsInquiry(inquiry: {
@@ -456,10 +357,13 @@ export async function submitCmsInquiry(inquiry: {
   subject?: string;
   message: string;
 }) {
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    if (supabase) {
-      await supabase.from("contact_inquiries").insert([
+  if (!isSupabaseConfigured()) {
+    return { success: false, error: "Supabase is not configured." };
+  }
+  const supabase = createClient();
+  if (!supabase) return { success: false, error: "Unable to initialize the Supabase client." };
+
+  const { error } = await supabase.from("contact_inquiries").insert([
         {
           name: inquiry.name,
           email: inquiry.email,
@@ -469,31 +373,22 @@ export async function submitCmsInquiry(inquiry: {
           status: "unread",
         },
       ]);
-    }
-  }
-  const newInq = {
-    id: `inq-${Date.now()}`,
-    name: inquiry.name,
-    email: inquiry.email,
-    phone: inquiry.phone || "",
-    subject: inquiry.subject || "",
-    message: inquiry.message,
-    status: "unread" as const,
-    date: new Date().toISOString().split("T")[0],
-  };
-  localStore.inquiries.unshift(newInq);
+  if (error) return { success: false, error: error.message };
   return { success: true };
 }
 
-export async function updateInquiryStatus(id: string, status: "unread" | "replied" | "archived") {
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    if (supabase) {
-      await supabase.from("contact_inquiries").update({ status }).eq("id", id);
-    }
+export async function updateInquiryStatus(
+  id: string,
+  status: "unread" | "replied" | "archived"
+): Promise<{ success: boolean; error?: string }> {
+  if (!isSupabaseConfigured()) {
+    return { success: false, error: "Supabase is not configured." };
   }
-  const item = localStore.inquiries.find((i) => i.id === id);
-  if (item) item.status = status;
+  const supabase = createClient();
+  if (!supabase) return { success: false, error: "Unable to initialize the Supabase client." };
+
+  const { error } = await supabase.from("contact_inquiries").update({ status }).eq("id", id);
+  if (error) return { success: false, error: error.message };
   return { success: true };
 }
 
@@ -514,6 +409,7 @@ export async function getCmsGallery(
 
       if (error) {
         if (options.throwOnError) throw new Error(error.message);
+        console.error("Unable to load gallery photos:", error.message);
         return [];
       }
 
@@ -530,7 +426,10 @@ export async function getCmsGallery(
     }
   }
 
-  return localStore.gallery;
+  if (options.throwOnError) {
+    throw new Error("Supabase is not configured. Gallery data is unavailable.");
+  }
+  return [];
 }
 
 export async function saveCmsGalleryItem(
@@ -552,11 +451,7 @@ export async function saveCmsGalleryItem(
     }
   }
 
-  localStore.gallery.unshift({
-    ...item,
-    id: item.id || `gal-${Date.now()}`,
-  });
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 export async function deleteCmsGalleryItem(id: string): Promise<{ success: boolean; error?: string }> {
@@ -568,8 +463,7 @@ export async function deleteCmsGalleryItem(id: string): Promise<{ success: boole
       return { success: true };
     }
   }
-  localStore.gallery = localStore.gallery.filter((g) => g.id !== id);
-  return { success: true };
+  return { success: false, error: "Supabase is not configured or unavailable." };
 }
 
 /* =========================================================================
@@ -582,18 +476,25 @@ export type CmsTeamMember = TeamMember & {
 };
 
 export async function getCmsTeam(): Promise<CmsTeamMember[]> {
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    if (supabase) {
-      const { data, error } = await supabase
-        .from("team_members")
-        .select("*")
-        .order("order_index", { ascending: true });
-      if (!error && data) return data as CmsTeamMember[];
-      if (error) console.error("Unable to load team members:", error.message);
-    }
+  if (!isSupabaseConfigured()) {
+    throw new Error("Team management requires Supabase configuration.");
   }
-  return localStore.team as CmsTeamMember[];
+
+  const supabase = createClient();
+  if (!supabase) throw new Error("Unable to initialize the Supabase client.");
+
+  const { data, error } = await supabase
+    .from("team_members")
+    .select("id, name, role, bio, initials, image, department, is_published, order_index, created_at")
+    .order("order_index", { ascending: true });
+
+  if (error?.code === "42703") {
+    throw new Error(
+      "The team directory database schema is outdated. Apply supabase/migrations/20261029_team_directory.sql, then refresh this page."
+    );
+  }
+  if (error) throw new Error(`Unable to load team members: ${error.message}`);
+  return (data || []) as CmsTeamMember[];
 }
 
 export async function saveCmsTeamMember(
@@ -611,52 +512,56 @@ export async function saveCmsTeamMember(
     is_published: member.is_published ?? true,
   };
 
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    if (supabase) {
-      const query = existingMember?.id
-        ? supabase.from("team_members").update(payload).eq("id", existingMember.id)
-        : existingMember?.name
-          ? supabase.from("team_members").update(payload).eq("name", existingMember.name)
-          : supabase.from("team_members").insert(payload);
-      const { error } = await query;
-      if (error) return { success: false, error: error.message };
-      return { success: true };
-    }
+  if (!isSupabaseConfigured()) {
+    return { success: false, error: "Team management requires Supabase configuration." };
   }
-  const existingIndex = localStore.team.findIndex((candidate) =>
-    existingMember?.id
-      ? (candidate as CmsTeamMember).id === existingMember.id
-      : existingMember?.name === candidate.name
-  );
-  const savedMember: CmsTeamMember = {
-    ...payload,
-    id: existingIndex >= 0
-      ? (localStore.team[existingIndex] as CmsTeamMember).id
-      : member.id || `team-${Date.now()}`,
-  };
-  if (existingIndex >= 0) localStore.team[existingIndex] = savedMember;
-  else localStore.team.push(savedMember);
+
+  const supabase = createClient();
+  if (!supabase) return { success: false, error: "Unable to initialize the Supabase client." };
+
+  if (existingMember) {
+    if (!existingMember.id) {
+      return { success: false, error: "This team member is missing a database ID and cannot be edited." };
+    }
+
+    const { data, error } = await supabase
+      .from("team_members")
+      .update(payload)
+      .eq("id", existingMember.id)
+      .select("id")
+      .maybeSingle();
+    if (error) return { success: false, error: error.message };
+    if (!data) return { success: false, error: "This team member could not be found." };
+    return { success: true };
+  }
+
+  const { error } = await supabase.from("team_members").insert(payload);
+  if (error) return { success: false, error: error.message };
   return { success: true };
 }
 
 export async function deleteCmsTeamMember(
   member: Pick<CmsTeamMember, "id" | "name">
 ): Promise<{ success: boolean; error?: string }> {
-  if (isSupabaseConfigured()) {
-    const supabase = createClient();
-    if (supabase) {
-      const query = member.id
-        ? supabase.from("team_members").delete().eq("id", member.id)
-        : supabase.from("team_members").delete().eq("name", member.name);
-      const { error } = await query;
-      if (error) return { success: false, error: error.message };
-      return { success: true };
-    }
+  if (!member.id) {
+    return { success: false, error: "This team member is missing a database ID and cannot be removed." };
   }
-  localStore.team = localStore.team.filter((t) =>
-    member.id ? (t as CmsTeamMember).id !== member.id : t.name !== member.name
-  );
+
+  if (!isSupabaseConfigured()) {
+    return { success: false, error: "Team management requires Supabase configuration." };
+  }
+
+  const supabase = createClient();
+  if (!supabase) return { success: false, error: "Unable to initialize the Supabase client." };
+
+  const { data, error } = await supabase
+    .from("team_members")
+    .delete()
+    .eq("id", member.id)
+    .select("id")
+    .maybeSingle();
+  if (error) return { success: false, error: error.message };
+  if (!data) return { success: false, error: "This team member could not be found." };
   return { success: true };
 }
 
@@ -669,13 +574,14 @@ export async function getCmsStats() {
   const news = await getCmsArticles();
   const inquiries = await getCmsInquiries();
   const testimonials = await getCmsTestimonials();
+  const team = isSupabaseConfigured() ? await getCmsTeam() : [];
 
   return {
     totalProjects: projects.length,
     totalArticles: news.length,
     totalTestimonials: testimonials.length,
-    unreadInquiries: inquiries.filter((i: any) => i.status === "unread").length,
-    totalGalleryItems: localStore.gallery.length,
-    totalTeamMembers: localStore.team.length,
+    unreadInquiries: inquiries.filter((inquiry: { status: string }) => inquiry.status === "unread").length,
+    totalGalleryItems: (await getCmsGallery()).length,
+    totalTeamMembers: team.length,
   };
 }

@@ -9,6 +9,7 @@ import { submitCmsInquiry } from "@/lib/cms";
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,11 +23,18 @@ export default function ContactForm() {
     if (!formData.name || !formData.email || !formData.message) return;
     try {
       setSubmitting(true);
-      await submitCmsInquiry(formData);
+      setSubmissionError("");
+      const result = await submitCmsInquiry(formData);
+      if (!result.success) {
+        setSubmissionError(result.error || "Your message could not be sent. Please try again.");
+        return;
+      }
       setSubmitted(true);
     } catch (err) {
       console.error("Submission failed", err);
-      setSubmitted(true);
+      setSubmissionError(
+        err instanceof Error ? err.message : "Your message could not be sent. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -42,7 +50,7 @@ export default function ContactForm() {
           Thank You for Reaching Out!
         </h3>
         <p className="mt-2 text-sm text-brand-muted max-w-[420px] mx-auto leading-relaxed">
-          Your message has been received. A member of our volunteer team in Malawi or Atlanta will get back to you shortly.
+          Your message has been received. A member of our team in Malawi or Atlanta will get back to you shortly.
         </p>
         <Button
           onClick={() => {
@@ -59,6 +67,11 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {submissionError && (
+        <p role="alert" className="m-0 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {submissionError}
+        </p>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-brand-forest mb-1.5">

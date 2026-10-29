@@ -60,10 +60,12 @@ export default function AdminTeamPage() {
 
   async function loadMembers() {
     setIsLoading(true);
+    setSaveError("");
     try {
       setMembers(await getCmsTeam());
-    } catch {
-      setSaveError("Unable to load team members. Please refresh and try again.");
+    } catch (error) {
+      setMembers([]);
+      setSaveError(error instanceof Error ? error.message : "Unable to load team members. Please refresh and try again.");
     } finally {
       setIsLoading(false);
     }
@@ -125,12 +127,16 @@ export default function AdminTeamPage() {
   async function handleDelete(member: CmsTeamMember) {
     if (!confirm(`Remove ${member.name} from the team directory?`)) return;
     setSaveError("");
-    const result = await deleteCmsTeamMember({ id: member.id, name: member.name });
-    if (!result.success) {
-      setSaveError(result.error || "Unable to remove this team member.");
-      return;
+    try {
+      const result = await deleteCmsTeamMember({ id: member.id, name: member.name });
+      if (!result.success) {
+        setSaveError(result.error || "Unable to remove this team member.");
+        return;
+      }
+      await loadMembers();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Unable to remove this team member.");
     }
-    await loadMembers();
   }
 
   const groupedMembers = useMemo(() => {

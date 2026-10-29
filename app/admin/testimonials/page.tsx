@@ -4,17 +4,14 @@ import { useState, useEffect } from "react";
 import {
   Edit,
   GraduationCap,
-  MessageSquareQuote,
   PlusCircle,
-  Quote,
-  Sparkles,
   Sprout,
   Star,
   Trash2,
   UtensilsCrossed,
 } from "lucide-react";
 import { deleteCmsTestimonial, getCmsTestimonials, saveCmsTestimonial } from "@/lib/cms";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,13 +23,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+type TestimonialItem = {
+  id?: string;
+  title: string;
+  author: string;
+  quote: string;
+  accent?: string;
+  icon?: string;
+  rating?: number;
+};
+
 export default function AdminTestimonialsPage() {
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<TestimonialItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentItem, setCurrentItem] = useState<any>({});
+  const [currentItem, setCurrentItem] = useState<Partial<TestimonialItem>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deletingItemKey, setDeletingItemKey] = useState<string | null>(null);
 
@@ -47,7 +53,6 @@ export default function AdminTestimonialsPage() {
 
   function handleOpenCreate() {
     setSaveError(null);
-    setSaveNotice(null);
     setCurrentItem({
       title: "",
       author: "",
@@ -59,9 +64,8 @@ export default function AdminTestimonialsPage() {
     setIsEditing(true);
   }
 
-  function handleOpenEdit(item: any) {
+  function handleOpenEdit(item: TestimonialItem) {
     setSaveError(null);
-    setSaveNotice(null);
     setCurrentItem({ ...item });
     setIsEditing(true);
   }
@@ -72,24 +76,20 @@ export default function AdminTestimonialsPage() {
 
     setIsSaving(true);
     setSaveError(null);
-    setSaveNotice(null);
 
     try {
-      const result = await saveCmsTestimonial(currentItem);
+      const result = await saveCmsTestimonial({
+        ...currentItem,
+        title: currentItem.title,
+        author: currentItem.author,
+        quote: currentItem.quote,
+      });
       if (!result.success) {
         setSaveError(result.error || "The testimonial could not be saved.");
         return;
       }
 
       await loadTestimonials();
-      if (result.isMock) {
-        setSaveNotice(
-          "Saved in demo mode for this session only. Connect Supabase to publish it on the homepage."
-        );
-        setIsEditing(false);
-        return;
-      }
-
       setIsEditing(false);
     } catch (error) {
       setSaveError(
@@ -100,7 +100,7 @@ export default function AdminTestimonialsPage() {
     }
   }
 
-  async function handleDelete(item: any) {
+  async function handleDelete(item: TestimonialItem) {
     if (!confirm(`Delete the testimonial “${item.title}” by ${item.author}?`)) return;
 
     const itemKey = item.id || `${item.title}:${item.author}`;
@@ -144,15 +144,6 @@ export default function AdminTestimonialsPage() {
           Add Testimonial
         </Button>
       </div>
-
-      {saveNotice && (
-        <p
-          className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
-          role="status"
-        >
-          {saveNotice}
-        </p>
-      )}
 
       {deleteError && (
         <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
