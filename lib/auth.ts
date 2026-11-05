@@ -7,6 +7,21 @@ export type AdminUser = {
   role: "admin" | "editor" | "viewer";
 };
 
+function isAdminUser(value: unknown): value is AdminUser {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    "email" in value &&
+    "fullName" in value &&
+    "role" in value &&
+    typeof value.id === "string" &&
+    typeof value.email === "string" &&
+    typeof value.fullName === "string" &&
+    value.role === "admin"
+  );
+}
+
 /**
  * Validates whether Supabase environment variables are configured.
  */
@@ -29,55 +44,38 @@ export async function signInAdmin(
     return { user: null, error: "Supabase is not configured. Admin sign-in is unavailable." };
   }
 
-  const supabase = createClient();
-  if (!supabase) {
-    return { user: null, error: "Supabase client initialization failed" };
-  }
-
-  // 1. Authenticate with Supabase Auth
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-    email,
-    password: pass,
-    ...(captchaToken ? { options: { captchaToken } } : {}),
-  });
-
-  if (authError || !authData.user) {
-    return { user: null, error: authError?.message || "Invalid email or password" };
-  }
-
-  const fullName =
-    authData.user.user_metadata?.full_name ||
-    authData.user.user_metadata?.name ||
-    authData.user.email?.split("@")[0] ||
-    "Administrator";
-
   try {
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("role, full_name")
-      .eq("id", authData.user.id)
-      .maybeSingle();
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      cache: "no-store",
+      body: JSON.stringify({ email, password: pass, captchaToken }),
+    });
 
-    if (profileError || !profile || profile.role !== "admin") {
-      await supabase.auth.signOut();
-      return {
-        user: null,
-        error: profileError?.message || "Access denied. Only administrators are authorized.",
-      };
+    const result: unknown = await response.json().catch(() => null);
+    if (!response.ok) {
+      const message =
+        typeof result === "object" &&
+        result !== null &&
+        "error" in result &&
+        typeof result.error === "string"
+          ? result.error
+          : "Unable to sign in. Please try again.";
+      return { user: null, error: message };
     }
-    const userObj: AdminUser = {
-      id: authData.user.id,
-      email: authData.user.email || email,
-      fullName: profile.full_name || fullName,
-      role: "admin",
-    };
-    return { user: userObj, error: null };
-  } catch (error) {
-    await supabase.auth.signOut();
-    return {
-      user: null,
-      error: error instanceof Error ? error.message : "Unable to verify administrator access.",
-    };
+
+    const user =
+      typeof result === "object" && result !== null && "user" in result
+        ? result.user
+        : null;
+    if (!isAdminUser(user)) {
+      return { user: null, error: "Unable to sign in. Please try again." };
+    }
+
+    return { user, error: null };
+  } catch {
+    return { user: null, error: "Unable to sign in. Please try again." };
   }
 }
 

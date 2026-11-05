@@ -25,6 +25,10 @@ Admin panel: [http://localhost:3000/admin](http://localhost:3000/admin)
 
 See .env.example for required variables (Supabase + Cloudinary).
 
+Admin sign-in also requires the server-only `SUPABASE_SERVICE_ROLE_KEY` so the login rate limiter can persist attempts in Supabase. Set it in `.env.local` for Next.js development and in Cloudflare's runtime secrets for deployed Workers. Never expose it with a `NEXT_PUBLIC_` prefix.
+
+Apply `supabase/migrations/20261030_admin_login_rate_limit.sql` to the Supabase project to enable persistent admin login rate limiting. The endpoint limits each IP to 30 attempts and each valid email address to 8 attempts per 15-minute window.
+
 ## Team Directory Setup
 
 Apply `supabase/migrations/20261029_team_directory.sql` to the Supabase project to add the staff directory fields and access policies. It does not create staff records; create staff through the admin team page. Profile photo uploads require an administrator session, the team migration, and the Cloudinary variables listed below.
@@ -48,6 +52,7 @@ For a direct `npm run deploy`, make sure the build variables are present in `.en
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (server secret; required at runtime for the admin login rate limiter)
 - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`
